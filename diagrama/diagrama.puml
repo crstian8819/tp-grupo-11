@@ -1,0 +1,60 @@
+@startuml Diagrama de Clases TP
+    title "Diagrama de Clases\nTrabajo Práctico"
+    
+    'estado: enConstruccion/enPreparcion/listo
+    abstract Pedido {
+        id_pedido: number
+        producto: Producto[]
+        estado: string
+        precioFinal: number
+        
+
+        +setEstado(estado: string):void
+        +getEstado():string
+
+    }
+        'Tal vez al usar una interfaz con el metodo ModificarPedido, al usarse 'SIEMPRE ese metodo, en vez de modificar si o si en cada pedido, que pregunte 'antes de terminar de confirmar el pedido y pasarlo a cocina, si esta seguro, 'o quiere modificarlo... Entonces por eso usariamos una interfaz para 'ModificarPedido 
+    'Salon retirar envio
+    class PedidoSalon {
+        nMesa: number
+    }
+
+    class PedidoRetirar {
+        horario: number
+    }
+
+    class PedidoEnvio {
+        direccion: string
+        costoEnvio: number
+    }
+
+    class Menu {
+
+    }
+    'Array tipoProducto, composicion de tiposProductos, HacerCombos()
+
+    abstract Cocina {
+
+    }
+    class Parrilla {
+
+    }
+    class CocinaFria {
+
+    }
+    class Barra {
+        
+    }
+    class CocinaDulce {
+
+    }
+    'relaciones
+    PedidoSalon-u-|>Pedido
+    PedidoRetirar-u-|>Pedido
+    PedidoEnvio-u-|>Pedido
+    
+    Parrilla -l-|>Cocina
+    CocinaFria -u-|>Cocina
+    Barra -u-|>Cocina
+    CocinaDulce -r-|>Cocina
+@enduml
