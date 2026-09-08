@@ -1,60 +1,220 @@
 @startuml Diagrama de Clases TP
     title "Diagrama de Clases\nTrabajo Práctico"
     
-    'estado: enConstruccion/enPreparcion/listo
-    abstract Pedido {
-        id_pedido: number
-        producto: Producto[]
-        estado: string
-        precioFinal: number
-        
+     enum EstadoPedido{
+        EN_CONSTRUCCION
+        CONFIRMADO
+        FACTURADO
+    }
 
-        +setEstado(estado: string):void
-        +getEstado():string
+    enum Categoria{
+        ENTRADA
+        PLATO_PRINCIPAL
+        BEBIDA
+        POSTRE
+    }
+
+    enum EstadoItem{
+        PENDIENTE
+        EN_PREPARACION
+        LISTO
+    }
+    enum TipoTarjeta{
+        DEBITO
+        CREDITO
+    }
+    '-------------Restaurante-Sistema-----------------------
+    class Restaurante{
+        -menu:Menu
+        -descuentos:Descuento[]
+        -historial:HistorialPedido
+
+        +registrarPedido(pedido:Pedido):void
+        +confirmarPedido(pedido:Pedido):void
+        +facturarPedido(pedido:Pedido):void
+        +consultarHistorial():Pedido[]
+    }
+    Restaurante *-- Menu
+    Restaurante *-- HistorialPedido
+    Restaurante o-- Pedido
+    Restaurante o-- Descuento
+
+
+
+    '------------------ PEDIDOS -------------------------
+
+    abstract class Pedido {
+        -id_pedido: number
+        -items: ItemPedido[]
+        -estado: EstadoPedido
+        -medioPago:MedioPago
+        -totalCobrado:number        
+
+
+        +agregarItem(item:ItemPedido):void
+        +sacarItem(item:ItemPedido):void
+        +calcularPrecioFinal(): number
+        +setEstado(estado: EstadoPedido): void
+        +getEstado(): EstadoPedido
+        +deshacerUltimaModificacion():void
+        +estaListoParaFacturar():boolean
+        +facturar():void
+        +calcularTotalCobrar():number
 
     }
-        'Tal vez al usar una interfaz con el metodo ModificarPedido, al usarse 'SIEMPRE ese metodo, en vez de modificar si o si en cada pedido, que pregunte 'antes de terminar de confirmar el pedido y pasarlo a cocina, si esta seguro, 'o quiere modificarlo... Entonces por eso usariamos una interfaz para 'ModificarPedido 
-    'Salon retirar envio
+
     class PedidoSalon {
-        nMesa: number
+        -nMesa: number
     }
 
     class PedidoRetirar {
-        horario: number
+        -horario: number
     }
 
     class PedidoEnvio {
-        direccion: string
-        costoEnvio: number
+        -direccion: string
+        -costoEnvio: number
     }
+
+    PedidoSalon --|> Pedido
+    PedidoRetirar --|> Pedido
+    PedidoEnvio --|> Pedido
+
+    Pedido *-- ItemPedido
+
+
+    '------------ MENU / PRODUCTOS -------------
 
     class Menu {
+        -productos: Producto[]
 
+        +agregarProducto(producto:Producto):void
+        +sacarProducto(producto:Producto):void
+        +getProductoPorCategoria(categoria:Categoria):Producto[]
     }
-    'Array tipoProducto, composicion de tiposProductos, HacerCombos()
 
-    abstract Cocina {
+    abstract class Producto {
+        -nombre: string
 
+        +getPrecio(): number
+        +getCategorias(): Categoria[]
     }
-    class Parrilla {
 
-    }
-    class CocinaFria {
+    class ProductoIndividual {
+        -precio: number
+        -categoria: Categoria
 
+        +getPrecio(): number
+        +getCategorias(): Categoria[]
     }
-    class Barra {
+
+    class Combo  {
+        -productos: Producto[]
+        -beneficio: Beneficio
+
+        +getPrecio(): number
+        +getCategorias():Categoria[]
+    }
+
+    ProductoIndividual --|> Producto
+    Combo --|> Producto
+    Menu o-- Producto
+    Combo o-- Producto
+
+
+    '------------------ BENEFICIOS -----------------
+
+    interface Beneficio {
+        +calcularBeneficio(precioBase: number): number
+    }
+
+    class BeneficioPorcentual {
+        -porcentaje: number
+    }
+
+    class BeneficioPrecioFijo {
+        -precio: number
+    }
+
+    BeneficioPorcentual ..|> Beneficio
+    BeneficioPrecioFijo ..|> Beneficio
+
+    Combo --> Beneficio
+
+
+    '------------------ ITEMS -----------------
+
+    class ItemPedido {
+        -producto: Producto
+        -estado: EstadoItem
+        -cantidad: number
+        
+
+        +marcarEnPreparacion():void
+        +marcarListo():void
+        +puedeModificarse():boolean
+    }
+
+    ItemPedido --> Producto
+    ItemPedido --> Estacion
+
+
+    '--------------------- COCINA ----------------------
+
+    abstract class Estacion {
+        -nombre:string
+        -items: ItemPedido[]
+
+        +recibirItem(item: ItemPedido): void
+        +procesarSiguiente(): void
+    }
+
+    class Parrilla{}
+    class CocinaDulce{}
+    class CocinaFria{}
+    class Barra{}
+
+    Parrilla --|> Estacion
+    CocinaDulce --|> Estacion
+    CocinaFria --|> Estacion
+    Barra --|> Estacion
+    Estacion --> ItemPedido
+    '------------------- MedioPago ------------------------
+    interface MedioPago{
         
     }
-    class CocinaDulce {
-
+    class Efectivo{}
+    abstract class Tarjeta{
+        -numero:string
+        -tipo:TipoTarjeta
     }
-    'relaciones
-    PedidoSalon-u-|>Pedido
-    PedidoRetirar-u-|>Pedido
-    PedidoEnvio-u-|>Pedido
-    
-    Parrilla -l-|>Cocina
-    CocinaFria -u-|>Cocina
-    Barra -u-|>Cocina
-    CocinaDulce -r-|>Cocina
+    class TarjetaDebito{}
+    class TarjetaCredito{}
+    class BilleteraVirtual{}
+    Efectivo ..|> MedioPago
+    Tarjeta ..|> MedioPago
+    BilleteraVirtual ..|> MedioPago
+
+    TarjetaDebito --|> Tarjeta
+    TarjetaCredito --|> Tarjeta
+
+    interface Descuento{
+        +calcularDescuento(pedido:Pedido):number
+    }
+    class DescuentoEfectivo{
+        -porcentaje:number
+    }
+    class DescuentoDia{
+        -dia:string
+        -porcentaje:number
+    }
+    DescuentoEfectivo ..|> Descuento
+    DescuentoDia ..|> Descuento
+    '-------------------- Historial------------------------
+    class HistorialPedido{
+        -pedidosFinalizados:Pedido[]
+        +agregarPedido(pedido:Pedido):void
+        +consultarPedidos():Pedido[]
+    }
+    HistorialPedido o-- Pedido
 @enduml
