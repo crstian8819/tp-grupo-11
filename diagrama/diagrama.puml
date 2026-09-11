@@ -26,18 +26,19 @@
     '-------------Restaurante-Sistema-----------------------
     class Restaurante{
         -menu:Menu
+        -cocinas:Cocina[]
         -descuentos:Descuento[]
-        -historial:HistorialPedido
+        -historialPedidos:Pedido[]
 
         +registrarPedido(pedido:Pedido):void
         +confirmarPedido(pedido:Pedido):void
         +facturarPedido(pedido:Pedido):void
-        +consultarHistorial():Pedido[]
+        +consultarHistorial():void
     }
     Restaurante *-- Menu
-    Restaurante *-- HistorialPedido
+    Restaurante *-- Cocina
     Restaurante o-- Pedido
-    Restaurante o-- Descuento
+    Restaurante ..|> Descuento
 
 
 
@@ -76,9 +77,9 @@
         -costoEnvio: number
     }
 
-    PedidoSalon --|> Pedido
-    PedidoRetirar --|> Pedido
-    PedidoEnvio --|> Pedido
+    PedidoSalon -u-|> Pedido
+    PedidoRetirar -u-|> Pedido
+    PedidoEnvio -u-|> Pedido
 
     Pedido *-- ItemPedido
 
@@ -86,21 +87,21 @@
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
-        -productos: Producto[]
+        -productos: ProductoIndividual[]
+        -combos: Combo[]
 
         +agregarProducto(producto:Producto):void
         +sacarProducto(producto:Producto):void
         +getProductoPorCategoria(categoria:Categoria):Producto[]
     }
 
-    abstract class Producto {
-        -nombre: string
+    interface Producto {
 
         +getPrecio(): number
-        +getCategorias(): Categoria[]
     }
 
     class ProductoIndividual {
+        -nombre: string
         -precio: number
         -categoria: Categoria
 
@@ -109,17 +110,18 @@
     }
 
     class Combo  {
-        -productos: Producto[]
+        -productos: ProductoIndividual[]
         -beneficio: Beneficio
 
         +getPrecio(): number
         +getCategorias():Categoria[]
     }
 
-    ProductoIndividual --|> Producto
-    Combo --|> Producto
-    Menu o-- Producto
-    Combo o-- Producto
+    ProductoIndividual ..|> Producto
+    Menu *-- ProductoIndividual
+    Menu *-- Combo
+    Combo *-- ProductoIndividual
+    Combo ..|> Producto
 
 
     '------------------ BENEFICIOS -----------------
@@ -139,7 +141,7 @@
     BeneficioPorcentual ..|> Beneficio
     BeneficioPrecioFijo ..|> Beneficio
 
-    Combo --> Beneficio
+    Combo ..|> Beneficio
 
 
     '------------------ ITEMS -----------------
@@ -155,13 +157,11 @@
         +puedeModificarse():boolean
     }
 
-    ItemPedido --> Producto
-    ItemPedido --> Estacion
 
 
     '--------------------- COCINA ----------------------
 
-    abstract class Estacion {
+    abstract class Cocina {
         -nombre:string
         -items: ItemPedido[]
 
@@ -174,14 +174,14 @@
     class CocinaFria{}
     class Barra{}
 
-    Parrilla --|> Estacion
-    CocinaDulce --|> Estacion
-    CocinaFria --|> Estacion
-    Barra --|> Estacion
-    Estacion --> ItemPedido
+    Parrilla --|> Cocina
+    CocinaDulce --|> Cocina
+    CocinaFria --|> Cocina
+    Barra --|> Cocina
+    Cocina *-- Pedido
     '------------------- MedioPago ------------------------
     interface MedioPago{
-        
+        +cobrar()
     }
     class Efectivo{}
     abstract class Tarjeta{
@@ -210,6 +210,7 @@
     }
     DescuentoEfectivo ..|> Descuento
     DescuentoDia ..|> Descuento
+
     '-------------------- Historial------------------------
     class HistorialPedido{
         -pedidosFinalizados:Map<number, Pedido>
