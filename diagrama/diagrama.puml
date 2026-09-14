@@ -217,7 +217,7 @@
         +agregarPedido(pedido:Pedido):void
         +consultarPedidos():Pedido[]
     }
-    HistorialPedido o-- Pedido
+    'HistorialPedido o-- Pedido
     HistorialPedido "1" --> "0..*" Pedido
     'Un pedido contiene exactamente Un registro en historial de Pedidos
     'HistorialPedido puede contener 0 o muchos pedidos.
