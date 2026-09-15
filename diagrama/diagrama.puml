@@ -35,13 +35,15 @@
         +facturarPedido(pedido:Pedido):void
         +consultarHistorial():void
     }
-    Restaurante *-- Menu
-    Restaurante *-- Cocina
-    Restaurante o-- Pedido
-    Restaurante ..|> Descuento
+    Restaurante -r-* Menu
+    'Restaurante --* Cocina
+    'Restaurante o-- Pedido
+    Restaurante -d-* GestorPedidos
+    Restaurante --l-* GestorPagos
+    'Restaurante ..|> Descuento
 
-
-
+   
+    
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
@@ -51,7 +53,7 @@
         -medioPago:MedioPago
         -totalCobrado:number        
 
-
+        +puedeModificarse():boolean
         +agregarItem(item:ItemPedido):void
         +sacarItem(item:ItemPedido):void
         +calcularPrecioFinal(): number
@@ -81,8 +83,9 @@
     PedidoRetirar -u-|> Pedido
     PedidoEnvio -u-|> Pedido
 
-    Pedido *-- ItemPedido
-
+    Pedido -r-* ItemIndividual
+    Pedido --* Cocina
+    Pedido ..|> Producto
 
     '------------ MENU / PRODUCTOS -------------
 
@@ -100,13 +103,17 @@
         +getPrecio(): number
     }
 
-    class ProductoIndividual {
+    class ItemIndividual {
         -nombre: string
         -precio: number
+        -estado: EstadoItem
         -categoria: Categoria
+        -cantidad: number
 
         +getPrecio(): number
-        +getCategorias(): Categoria[]
+        +getCategoria(): Categoria
+        +marcarEnPreparacion():void
+        +marcarListo():void
     }
 
     class Combo  {
@@ -117,12 +124,11 @@
         +getCategorias():Categoria[]
     }
 
-    ProductoIndividual ..|> Producto
-    Menu *-- ProductoIndividual
-    Menu *-- Combo
-    Combo *-- ProductoIndividual
+    ItemIndividual ..|> Producto
+    Menu --* ItemIndividual
+    Menu --* Combo
+    Combo --* ItemIndividual
     Combo ..|> Producto
-
 
     '------------------ BENEFICIOS -----------------
 
@@ -138,26 +144,10 @@
         -precio: number
     }
 
-    BeneficioPorcentual ..|> Beneficio
-    BeneficioPrecioFijo ..|> Beneficio
+    'BeneficioPorcentual ..|> Beneficio
+    'BeneficioPrecioFijo ..|> Beneficio
 
-    Combo ..|> Beneficio
-
-
-    '------------------ ITEMS -----------------
-
-    class ItemPedido {
-        -producto: Producto
-        -estado: EstadoItem
-        -cantidad: number
-        
-
-        +marcarEnPreparacion():void
-        +marcarListo():void
-        +puedeModificarse():boolean
-    }
-
-
+    'Combo ..|> Beneficio
 
     '--------------------- COCINA ----------------------
 
@@ -174,29 +164,39 @@
     class CocinaFria{}
     class Barra{}
 
-    Parrilla --|> Cocina
-    CocinaDulce --|> Cocina
-    CocinaFria --|> Cocina
-    Barra --|> Cocina
-    Cocina *-- Pedido
+    Parrilla -u-|> Cocina
+    CocinaDulce -u-|> Cocina
+    CocinaFria -u-|> Cocina
+    Barra -u-|> Cocina
+
+    '------------------ GESTOR_PAGOS -------------------------
+    class GestorPagos {
+        -medioPago: MedioPago
+
+        +Cobrar(): Factura
+    }
+    GestorPagos -l-* MedioPago
+
     '------------------- MedioPago ------------------------
-    interface MedioPago{
-        +cobrar()
+    abstract class MedioPago{
+        
+        +Pagar()
     }
     class Efectivo{}
-    abstract class Tarjeta{
+    class Tarjeta{
         -numero:string
         -tipo:TipoTarjeta
     }
-    class TarjetaDebito{}
-    class TarjetaCredito{}
+    'Implementacion de Enum TipoTarjeta (a confirmar cambios)
+    'class TarjetaDebito{}
+    'class TarjetaCredito{}
     class BilleteraVirtual{}
-    Efectivo ..|> MedioPago
-    Tarjeta ..|> MedioPago
-    BilleteraVirtual ..|> MedioPago
+    Efectivo -u-|> MedioPago
+    Tarjeta -u-|> MedioPago
+    BilleteraVirtual -u-|> MedioPago
 
-    TarjetaDebito --|> Tarjeta
-    TarjetaCredito --|> Tarjeta
+    'TarjetaDebito --|> Tarjeta
+    'TarjetaCredito --|> Tarjeta
 
     interface Descuento{
         +calcularDescuento(pedido:Pedido):number
@@ -212,13 +212,13 @@
     DescuentoDia ..|> Descuento
 
     '-------------------- Historial------------------------
-    class HistorialPedido{
+    class GestorPedidos{
         -pedidosFinalizados:Map<number, Pedido>
         +agregarPedido(pedido:Pedido):void
         +consultarPedidos():Pedido[]
     }
     'HistorialPedido o-- Pedido
-    HistorialPedido "1" --> "0..*" Pedido
+    GestorPedidos "1" -d-> "0..*" Pedido
     'Un pedido contiene exactamente Un registro en historial de Pedidos
     'HistorialPedido puede contener 0 o muchos pedidos.
 @enduml
