@@ -28,18 +28,15 @@
         -menu:Menu
         -cocinas:Cocina[]
         -descuentos:Descuento[]
-        -historialPedidos:Pedido[]
+        -pedidosFinalizados:Map<number, Pedido>
 
-        +registrarPedido(pedido:Pedido):void
-        +confirmarPedido(pedido:Pedido):void
-        +facturarPedido(pedido:Pedido):void
         +consultarHistorial():void
     }
-    Restaurante -r-* Menu
+    Restaurante *-r- Menu
     'Restaurante --* Cocina
     'Restaurante o-- Pedido
-    Restaurante -d-* GestorPedidos
-    Restaurante --l-* GestorPagos
+    Restaurante *-d- GestorPedidos
+    Restaurante *--l- GestorPagos
     'Restaurante ..|> Descuento
 
    
@@ -54,8 +51,8 @@
         -totalCobrado:number        
 
         +puedeModificarse():boolean
-        +agregarItem(item:ItemPedido):void
-        +sacarItem(item:ItemPedido):void
+        +agregarItem(item:ItemIndividual):void
+        +sacarItem(item:ItemIndividual):void
         +calcularPrecioFinal(): number
         +setEstado(estado: EstadoPedido): void
         +getEstado(): EstadoPedido
@@ -79,9 +76,9 @@
         -costoEnvio: number
     }
 
-    PedidoSalon -u-|> Pedido
-    PedidoRetirar -u-|> Pedido
-    PedidoEnvio -u-|> Pedido
+    Pedido -d-|> PedidoSalon
+    Pedido -d-|> PedidoRetirar
+    Pedido -d-|> PedidoEnvi
 
     Pedido -r-* ItemIndividual
     Pedido --* Cocina
@@ -90,7 +87,10 @@
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
-        -productos: ProductoIndividual[]
+        -entradas: itemIndividual[]
+        -platosPrincipales: itemIndividual[]
+        -bebidas: itemIndividual[]
+        -postres: itemIndividual[]
         -combos: Combo[]
 
         +agregarProducto(producto:Producto):void
@@ -121,13 +121,12 @@
         -beneficio: Beneficio
 
         +getPrecio(): number
-        +getCategorias():Categoria[]
     }
 
     ItemIndividual ..|> Producto
-    Menu --* ItemIndividual
-    Menu --* Combo
-    Combo --* ItemIndividual
+    Menu *-- ItemIndividual
+    Menu *-- Combo
+    Combo *-- ItemIndividual
     Combo ..|> Producto
 
     '------------------ BENEFICIOS -----------------
@@ -155,8 +154,8 @@
         -nombre:string
         -items: ItemPedido[]
 
-        +recibirItem(item: ItemPedido): void
-        +procesarSiguiente(): void
+        +recibirItem(item: ItemIndividual): void
+        +cocinarItem(item: itemIndividual): void
     }
 
     class Parrilla{}
@@ -211,11 +210,12 @@
     DescuentoEfectivo ..|> Descuento
     DescuentoDia ..|> Descuento
 
-    '-------------------- Historial------------------------
+    '-------------------- Gestor de Pedidos ------------------------
     class GestorPedidos{
-        -pedidosFinalizados:Map<number, Pedido>
         +agregarPedido(pedido:Pedido):void
-        +consultarPedidos():Pedido[]
+        +registrarPedido(pedido:Pedido):void
+        +confirmarPedido(pedido:Pedido):void
+        +facturarPedido(pedido:Pedido):void
     }
     'HistorialPedido o-- Pedido
     GestorPedidos "1" -d-> "0..*" Pedido
