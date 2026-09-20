@@ -1,7 +1,7 @@
 import {Categoria} from "./categoria";
 import {EstadoItem} from "./estadoItem";
 
-export class ItemPedido {
+export class ItemIndividual {
     private nombre: string;
     private precio: number;
     private estado: EstadoItem | undefined;
@@ -39,16 +39,19 @@ export class ItemPedido {
     public getNombre () : string {
         return this.nombre;
     }
+
     public getPrecio () : number {
         return this.precio;
-        
     }
+
     public getCantidad () : number {
         return this.cantidad;
     }
+
     public getEstado () : EstadoItem|undefined {
         return this.estado;
     }
+    
     public getCategoria () : Categoria|undefined {
         return this.categoria;
     }
