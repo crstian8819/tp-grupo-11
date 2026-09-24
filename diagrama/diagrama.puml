@@ -28,10 +28,8 @@
     class Restaurante{
         -menu:Menu
         -cocinas:Cocina[]
-        -descuentos:Descuento[]
-        -pedidosFinalizados:Map<number, Pedido>
-
-        +consultarHistorial():void
+        -gestorPedidos:GestorPedidos
+        -gestorPagos:GestorPagos
     }
 
     '------------------ PEDIDOS -------------------------
@@ -128,7 +126,7 @@
     class GestorPagos {
         -medioPago: MedioPago
 
-        +Cobrar(): Factura
+        +Cobrar(pedido : Pedido): Factura
     }
 
     '------------------- MedioPago ------------------------
@@ -159,10 +157,12 @@
     '-------------------- Gestor de Pedidos ------------------------
 
     class GestorPedidos{
-        +agregarPedido(pedido:Pedido):void
-        +registrarPedido(pedido:Pedido):void
+        -pedidosFinalizados:Map<number, Pedido>
+
+        +consultarHistorial():void
+        +crearPedido() : Pedido
         +confirmarPedido(pedido:Pedido):void
-        +facturarPedido(pedido:Pedido):void
+        +registrarPedido(pedido:Pedido):void
     }
 
     '-------------------- RELACIONES ------------------------
@@ -178,9 +178,9 @@
 
 'PEDIDOS
 
-    Pedido -d-|> PedidoSalon
-    Pedido -d-|> PedidoRetirar
-    Pedido -d-|> PedidoEnvio
+    Pedido <|-d- PedidoSalon
+    Pedido <|-d- PedidoRetirar
+    Pedido <|-d- PedidoEnvio
     Pedido -r-* ItemIndividual
     Pedido --* Cocina
     Pedido ..|> Producto
@@ -220,7 +220,7 @@
 'GESTOR DE PEDIDOS
 
     'HistorialPedido o-- Pedido
-    GestorPedidos "1" -d-> "0..*" Pedido
+    GestorPedidos *-- Pedido
     'Un pedido contiene exactamente Un registro en historial de Pedidos
     'HistorialPedido puede contener 0 o muchos pedidos.
 
