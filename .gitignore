@@ -1,0 +1,5 @@
+# Dependencias de Node.js
+node_modules/
+
+# Reportes de cobertura de tests
+coverage/
