@@ -24,23 +24,13 @@
         CREDITO
     }
     '-------------Restaurante-Sistema-----------------------
+
     class Restaurante{
         -menu:Menu
         -cocinas:Cocina[]
-        -descuentos:Descuento[]
-        -historialPedidos:Pedido[]
-
-        +registrarPedido(pedido:Pedido):void
-        +confirmarPedido(pedido:Pedido):void
-        +facturarPedido(pedido:Pedido):void
-        +consultarHistorial():void
+        -gestorPedidos:GestorPedidos
+        -gestorPagos:GestorPagos
     }
-    Restaurante *-- Menu
-    Restaurante *-- Cocina
-    Restaurante o-- Pedido
-    Restaurante ..|> Descuento
-
-
 
     '------------------ PEDIDOS -------------------------
 
@@ -48,15 +38,12 @@
         -id_pedido: number
         -items: ItemPedido[]
         -estado: EstadoPedido
-        -medioPago:MedioPago
-        -totalCobrado:number        
+        -precioFinal: number
 
-
-        +agregarItem(item:ItemPedido):void
-        +sacarItem(item:ItemPedido):void
-        +calcularPrecioFinal(): number
+        +puedeModificarse():boolean
+        +agregarItem(item:ItemIndividual):void
+        +sacarItem(item:ItemIndividual):void
         +setEstado(estado: EstadoPedido): void
-        +getEstado(): EstadoPedido
         +deshacerUltimaModificacion():void
         +estaListoParaFacturar():boolean
         +facturar():void
@@ -77,17 +64,13 @@
         -costoEnvio: number
     }
 
-    PedidoSalon -u-|> Pedido
-    PedidoRetirar -u-|> Pedido
-    PedidoEnvio -u-|> Pedido
-
-    Pedido *-- ItemPedido
-
-
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
-        -productos: ProductoIndividual[]
+        -entradas: itemIndividual[]
+        -platosPrincipales: itemIndividual[]
+        -bebidas: itemIndividual[]
+        -postres: itemIndividual[]
         -combos: Combo[]
 
         +agregarProducto(producto:Producto):void
@@ -100,73 +83,37 @@
         +getPrecio(): number
     }
 
-    class ProductoIndividual {
+    class ItemIndividual {
         -nombre: string
         -precio: number
+        -estado: EstadoItem
         -categoria: Categoria
+        -cantidad: number
 
         +getPrecio(): number
-        +getCategorias(): Categoria[]
+        +getCategoria(): Categoria
+        +marcarEnPreparacion():void
+        +marcarListo():void
     }
 
-    class Combo  {
-        -productos: ProductoIndividual[]
-        -beneficio: Beneficio
-
-        +getPrecio(): number
-        +getCategorias():Categoria[]
+    class Combo {
+        -productos: ItemIndividual[]
     }
 
-    ProductoIndividual ..|> Producto
-    Menu *-- ProductoIndividual
-    Menu *-- Combo
-    Combo *-- ProductoIndividual
-    Combo ..|> Producto
-
-
-    '------------------ BENEFICIOS -----------------
+    '------------------ BENEFICIO -----------------
 
     interface Beneficio {
         +calcularBeneficio(precioBase: number): number
     }
 
-    class BeneficioPorcentual {
-        -porcentaje: number
-    }
-
-    class BeneficioPrecioFijo {
-        -precio: number
-    }
-
-    BeneficioPorcentual ..|> Beneficio
-    BeneficioPrecioFijo ..|> Beneficio
-
-    Combo ..|> Beneficio
-
-
-    '------------------ ITEMS -----------------
-
-    class ItemPedido {
-        -producto: Producto
-        -estado: EstadoItem
-        -cantidad: number
-        
-
-        +marcarEnPreparacion():void
-        +marcarListo():void
-        +puedeModificarse():boolean
-    }
-
-
-
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {
         -nombre:string
-        -items: ItemPedido[]
+        -items: ItemIndividual[]
 
-        +recibirItem(item: ItemPedido): void
-        +procesarSiguiente(): void
+        +recibirItem(item: ItemIndividual): void
+        +cocinarItem(item: itemIndividual): void
     }
 
     class Parrilla{}
@@ -174,41 +121,107 @@
     class CocinaFria{}
     class Barra{}
 
-    Parrilla --|> Cocina
-    CocinaDulce --|> Cocina
-    CocinaFria --|> Cocina
-    Barra --|> Cocina
-    Cocina *-- Pedido
-    '------------------- MedioPago ------------------------
-    interface MedioPago{
-        +cobrar()
+    '------------------ GESTOR_PAGOS -------------------------
+
+    class GestorPagos {
+        -medioPago: MedioPago
+
+        +Cobrar(pedido : Pedido): Factura
     }
-    class Efectivo{}
-    abstract class Tarjeta{
+
+    '------------------- MedioPago ------------------------
+
+    abstract class MedioPago{
+        
+        +Pagar()
+    }
+
+    class Efectivo {}
+
+    class Tarjeta{
         -numero:string
         -tipo:TipoTarjeta
     }
-    class TarjetaDebito{}
-    class TarjetaCredito{}
+    
     class BilleteraVirtual{}
-    Efectivo ..|> MedioPago
-    Tarjeta ..|> MedioPago
-    BilleteraVirtual ..|> MedioPago
-
-    TarjetaDebito --|> Tarjeta
-    TarjetaCredito --|> Tarjeta
 
     interface Descuento{
         +calcularDescuento(pedido:Pedido):number
     }
-    class DescuentoEfectivo{
-        -porcentaje:number
-    }
+
     class DescuentoDia{
         -dia:string
         -porcentaje:number
     }
-    DescuentoEfectivo ..|> Descuento
+
+    '-------------------- Gestor de Pedidos ------------------------
+
+    class GestorPedidos{
+        -pedidosFinalizados:Map<number, Pedido>
+
+        +consultarHistorial():void
+        +crearPedido() : Pedido
+        +confirmarPedido(pedido:Pedido):void
+        +registrarPedido(pedido:Pedido):void
+    }
+
+    '-------------------- RELACIONES ------------------------
+
+'RESTAURANTE
+
+    Restaurante *-r- Menu
+    Restaurante *-- Cocina
+    'Restaurante o-- Pedido
+    Restaurante *-d- GestorPedidos
+    Restaurante *--l- GestorPagos
+    'Restaurante ..|> Descuento
+
+'PEDIDOS
+
+    Pedido <|-d- PedidoSalon
+    Pedido <|-d- PedidoRetirar
+    Pedido <|-d- PedidoEnvio
+    Pedido -r-* ItemIndividual
+    Pedido --* Cocina
+    Pedido ..|> Producto
+
+'MENU
+
+    ItemIndividual ..|> Producto
+    Menu *-- ItemIndividual
+    Menu *-- Combo
+    Combo *-- ItemIndividual
+    Combo ..|> Producto
+    Combo *.. Beneficio
+
+'COCINA
+
+    Parrilla -u-|> Cocina
+    CocinaDulce -u-|> Cocina
+    CocinaFria -u-|> Cocina
+    Barra -u-|> Cocina
+
+'GESTOR DE PAGOS
+
+    GestorPagos -l-* MedioPago
+    GestorPagos --o DescuentoDia
+
+'MEDIOS DE PAGO
+
+    Efectivo -u-|> MedioPago
+    Tarjeta -r-|> MedioPago
+    BilleteraVirtual -d-|> MedioPago
+    Efectivo .d.|> Descuento
+
+'DESCUENTOS
+
     DescuentoDia ..|> Descuento
+
+'GESTOR DE PEDIDOS
+
+    'HistorialPedido o-- Pedido
+    GestorPedidos *-- Pedido
+    'Un pedido contiene exactamente Un registro en historial de Pedidos
+    'HistorialPedido puede contener 0 o muchos pedidos.
 
 @enduml
