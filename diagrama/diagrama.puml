@@ -192,7 +192,7 @@
     Menu *-- Combo
     Combo *-- ItemIndividual
     Combo ..|> Producto
-    Combo ..|> Beneficio
+    Combo *.. Beneficio
 
 'COCINA
 
