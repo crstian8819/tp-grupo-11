@@ -1,23 +1,23 @@
 import {ItemIndividual} from "./itemIndividual";
-import {estadoPedido} from "./estadoPedido";
+import {estadoPedido as EstadoPedido} from "./estadoPedido";
 import {Producto} from "./producto"
 
 export abstract class Pedido implements Producto {
-    private id_pedido: number; //Pienso que el id deberia manejarlo el gestor, o el historial al manejarlo con map
+    private idPedido: number; //Pienso que el id deberia manejarlo el gestor, o el historial al manejarlo con map
     private items: Array<ItemIndividual>;
-    private estado: estadoPedido;
+    private estado: EstadoPedido;
     private precio: number;
     // private medioPago: medioPago; NO DEBE SER PARTE DE PEDIDO
 
-    constructor(id_pedido:number){
-        this.estado = estadoPedido.EN_CONSTRUCION;
-        this.id_pedido = id_pedido;
+    constructor(idPedido:number){
+        this.estado = EstadoPedido.EN_CONSTRUCION;
+        this.idPedido = idPedido;
         this.items = [];
         this.precio = 0;
     }
 
     public puedeModificarse () : boolean {
-        return this.estado === estadoPedido.EN_CONSTRUCION;
+        return this.estado === EstadoPedido.EN_CONSTRUCION;
     }
 
     public agregarItem(item: ItemIndividual) : void {
@@ -38,7 +38,7 @@ export abstract class Pedido implements Producto {
         return precio
     }
 
-    public setEstado(ESTADO: estadoPedido) : void {
+    public setEstado(ESTADO: EstadoPedido) : void {
         this.estado = ESTADO
     }
 
