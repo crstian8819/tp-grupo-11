@@ -131,7 +131,7 @@
 
     '------------------- MedioPago ------------------------
 
-    abstract class MedioPago{
+    interface MedioPago {
         
         +Pagar()
     }
