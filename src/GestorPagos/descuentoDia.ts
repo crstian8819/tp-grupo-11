@@ -1,16 +1,28 @@
 import { Pedido } from "../pedido";
 import { Descuento } from "./descuento";
 export class DescuentoDia implements Descuento {
-    private diaDeLaSemana: string | undefined;
+    private diaDeLaSemana: string;
     private porcentajeDescuento: number;
 
     public constructor(diaDeLaSemana?: string, porcentajeDescuento?: number) {
-        this.diaDeLaSemana = diaDeLaSemana ?? undefined;
+        this.diaDeLaSemana = diaDeLaSemana ?? '';
         this.porcentajeDescuento = porcentajeDescuento ?? 0;
     }
 
-    //FALTA LOGICA DE IMPLEMENTACION
+    public setDiaDeLaSemana(diaDeLaSemana:string):void {
+        this.diaDeLaSemana=diaDeLaSemana;
+    }
+    public getDiaDeLaSemana(): string {
+        return this.diaDeLaSemana;
+    }
+    public setPorcentajeDescuento(porcentaje:number): void {
+        this.porcentajeDescuento=porcentaje;
+    }
+    public getPorcentajeDescuento(): number {
+        return this.porcentajeDescuento
+    }
+
     public calcularDescuento(pedido: Pedido): number {
-        return 0
+        return pedido.getPrecio()*this.porcentajeDescuento
     }
 }

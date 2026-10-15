@@ -1,17 +1,21 @@
 import { Descuento } from "./descuento";
 import { Pedido } from "../pedido";
 import { MedioPago } from "./medioPago";
+//TODO: DESPUES DEL MERGE JUNTAR TODAS LAS CONSTANTES DE LAS CLASES EN UNA SOLA CARPETA 'CONSTANTES'
+const TEN_PERCENT:number=0.1;
 export class Efectivo implements MedioPago, Descuento{
-    private monto: number;
+    private porcentajeDescuento: number;
 
-    public constructor(monto?:number) {
-        this.monto=monto ?? 0;
+    constructor() {
+        this.porcentajeDescuento=TEN_PERCENT;
     }
 
-    //FALTA LOGICA DE IMPLEMENTACION
     public calcularDescuento(pedido: Pedido): number {
-        return 0
+        return pedido.getPrecio()*this.porcentajeDescuento
     }
-
-    public pagar(): void {}
+    
+    //FALTA LOGICA DE IMPLEMENTACION
+    public pagar(monto: number): void {
+        
+    }
 }
