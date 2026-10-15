@@ -129,11 +129,19 @@
         +Cobrar(pedido : Pedido): Factura
     }
 
+    class Factura {
+        -idFactura: string
+        -pedido: Pedido
+        -montoFinal: number
+
+        +constructor(pedido:Pedido)
+    }
+
     '------------------- MedioPago ------------------------
 
-    abstract class MedioPago{
+    interface MedioPago{
         
-        +Pagar()
+        +Pagar(monto: number): void
     }
 
     class Efectivo {}
@@ -203,8 +211,9 @@
 
 'GESTOR DE PAGOS
 
-    GestorPagos -l-* MedioPago
+    GestorPagos -l-> MedioPago
     GestorPagos --o DescuentoDia
+    GestorPagos .u.> Factura
 
 'MEDIOS DE PAGO
 
