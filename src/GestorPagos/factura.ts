@@ -6,7 +6,7 @@ export class Factura {
 
     //idFactura podría generarse por el length de pedidosFinalizados
     //pedidosFinalizados podría ser una lista de las Facturas. (pedidos ya cobrados)
-    public constructor(pedido: Pedido, montoFinal:number) {
+    public constructor(/*idFactura:number,*/ pedido: Pedido, montoFinal:number) {
         this.idFactura='';
         this.pedido=pedido;
         this.montoFinal=montoFinal;

@@ -1,16 +1,22 @@
 import { MedioPago } from "./medioPago";
 import { TipoTarjeta } from "./tipoTarjeta";
-export class Tarjeta implements MedioPago {
-    numero: number;
-    tipo: TipoTarjeta | undefined;
+import { ZERO } from "../Constantes/constantes";
 
-    public constructor(numero?:number, tipo?:TipoTarjeta) {
-        this.numero= numero ?? 0;
+export class Tarjeta extends MedioPago {
+    private numero: number;
+    private tipo: TipoTarjeta | undefined;
+
+    constructor(numero?:number, tipo?:TipoTarjeta) {
+        super();
+        this.numero= numero ?? ZERO;
         this.tipo = tipo ?? undefined ;
     }
 
-    //FALTA LOGICA DE IMPLEMENTACION
-    public pagar(monto:number): void {
+    public getNumero(): number {
+        return this.numero
+    }
 
+    public getTipo(): string | undefined {
+        return this.tipo
     }
 }
