@@ -1,5 +1,5 @@
 import { EstadoItem } from "./estadoItem"
-
+import { Producto } from "./producto"
 export class ItemPedido {
         private producto: Producto
         private estado: EstadoItem
@@ -20,12 +20,6 @@ export class ItemPedido {
             return this.estado;
         }
 
-        public marcarEnPreparacion():void{
-            this.estado=EstadoItem.EN_PREPARACION;
-        }
-        public marcarListo():void{
-            this.estado=EstadoItem.LISTO
-        }
         public puedeModificarse():boolean{
             return this.estado === EstadoItem.PENDIENTE;
         }
@@ -35,6 +29,10 @@ export class ItemPedido {
             [EstadoItem.LISTO,EstadoItem.LISTO],
         ]);
         public avanzarEstado():void{
-           this.estado=ItemPedido.SIGUIENTE_ESTADO.get(this.estado)!; //con ! le decimos que confie que estadoitem no va a ser undefined
+            const siguiente =ItemPedido.SIGUIENTE_ESTADO.get(this.estado);
+            if(!siguiente){
+                throw new Error("El item ya está listo");
+            }
+           this.estado=siguiente;
         }
     }
