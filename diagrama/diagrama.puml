@@ -19,10 +19,7 @@
         EN_PREPARACION
         LISTO
     }
-    enum TipoTarjeta{
-        DEBITO
-        CREDITO
-    }
+
     '-------------Restaurante-Sistema-----------------------
 
     class Restaurante{
@@ -79,19 +76,29 @@
     }
 
     interface Producto {
+        +getPrecio(): number
+    }
+
+    abstract class Item implements Producto { 
+        -nombre: string
+        -precio: number
 
         +getPrecio(): number
     }
 
-    class ItemIndividual {
-        -nombre: string
-        -precio: number
-        -estado: EstadoItem
+    class ItemIndividual extends Item{
         -categoria: Categoria
+
+
+
+        +getCategoria(): Categoria
+
+    }
+
+    class ItemPedido extends Item {
+        -estado: EstadoItem
         -cantidad: number
 
-        +getPrecio(): number
-        +getCategoria(): Categoria
         +marcarEnPreparacion():void
         +marcarListo():void
     }
@@ -181,17 +188,14 @@
     Pedido <|-d- PedidoSalon
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
-    Pedido -r-* ItemIndividual
+    Pedido -r-* ItemPedido
     Pedido --* Cocina
 
 'MENU
 
-    ItemIndividual ..|> Producto
     Menu *-- ItemIndividual
     Menu *-- Combo
     Combo *-- ItemIndividual
-    Combo ..|> Producto
-    Combo *.. Beneficio
 
 'COCINA
 
