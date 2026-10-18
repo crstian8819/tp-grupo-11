@@ -183,7 +183,6 @@
     Pedido <|-d- PedidoEnvio
     Pedido -r-* ItemIndividual
     Pedido --* Cocina
-    Pedido ..|> Producto
 
 'MENU
 
