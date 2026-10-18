@@ -79,7 +79,7 @@
         +getPrecio(): number
     }
 
-    abstract class Item implements Producto { 
+    abstract class Item{ 
         -nombre: string
         -precio: number
 
@@ -103,7 +103,7 @@
         +marcarListo():void
     }
 
-    class Combo {
+    class Combo{
         -productos: ItemIndividual[]
     }
 
@@ -188,14 +188,14 @@
     Pedido <|-d- PedidoSalon
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
-    Pedido -r-* ItemPedido
-    Pedido --* Cocina
+    Pedido --* ItemPedido
 
 'MENU
 
     Menu *-- ItemIndividual
-    Menu *-- Combo
-    Combo *-- ItemIndividual
+    Menu *-d- Combo
+    Combo *-l- ItemIndividual
+    Combo ..|> Producto
 
 'COCINA
 
@@ -203,6 +203,7 @@
     CocinaDulce -u-|> Cocina
     CocinaFria -u-|> Cocina
     Barra -u-|> Cocina
+    ItemPedido <-- Cocina
 
 'GESTOR DE PAGOS
 
@@ -227,4 +228,5 @@
     'Un pedido contiene exactamente Un registro en historial de Pedidos
     'HistorialPedido puede contener 0 o muchos pedidos.
 
+    Item .d.|> Producto
 @enduml
