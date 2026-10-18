@@ -35,7 +35,7 @@
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
-        -id_pedido: number
+        ' -id_pedido: number
         -items: ItemPedido[]
         -estado: EstadoPedido
         -precioFinal: number
@@ -45,8 +45,8 @@
         +sacarItem(item:ItemIndividual):void
         +setEstado(estado: EstadoPedido): void
         +deshacerUltimaModificacion():void
-        +estaListoParaFacturar():boolean
-        +facturar():void
+        +listoParaFacturar():boolean
+        ' +facturar():void
         +calcularTotalCobrar():number
 
     }

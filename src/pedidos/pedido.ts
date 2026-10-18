@@ -1,15 +1,15 @@
 import {ItemIndividual} from "../itemIndividual";
 import {estadoPedido as EstadoPedido} from "../estadoPedido";
+import {List} from "../estructuraDatos/listaEnlazada";
 
 export abstract class Pedido {
-    // private idPedido: number; //Pienso que el id deberia manejarlo el gestor, o el historial al manejarlo con map
-    private items: Array<ItemIndividual>;
+    private items: List<ItemIndividual>;
     private estado: EstadoPedido;
     private precioFinal: number;
 
     constructor(){
         // this.idPedido = this.items.length;
-        this.items = [];
+        this.items = new List<ItemIndividual>();
         this.precioFinal = undefined as unknown as number;
         this.estado = EstadoPedido.EN_CONSTRUCION;
     }
@@ -24,9 +24,9 @@ export abstract class Pedido {
         }
     }
 
-    public eliminarItem() : void {
+    public eliminarItem(value : ItemIndividual) : void {
         if (this.puedeModificarse()) {
-            this.items.pop();
+            this.items.delete(value);
         }
     }
 
@@ -35,14 +35,14 @@ export abstract class Pedido {
         this.estado = ESTADO
     }
     
-    public setPrecioFinal(): void {
-        this.precioFinal = 0;
+    // public setPrecioFinal(): void {
+    //     this.precioFinal = 0;
 
-        for (const item of this.items) {
-            this.precioFinal += item.getPrecio();
-        }
+    //     for (const item of this.items) {
+    //         this.precioFinal += item.getPrecio();
+    //     }
 
-    }
+    // }
     
     public getPrecioFinal() : number {
         return this.precioFinal;
