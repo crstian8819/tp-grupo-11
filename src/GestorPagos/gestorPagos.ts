@@ -1,4 +1,5 @@
 import { MedioPago } from "./medioPago";
+import { TipoMedioPago } from "./tipoMedioPago";
 import { DescuentoDia } from "./descuentoDia";
 import { Factura } from "./factura";
 import { Pedido } from "../pedido";
@@ -10,6 +11,7 @@ import { ErrorDeFacturacion } from "../Errores/errorDeFacturacion";
 import { TEN_PERCENT } from "../Constantes/constantes";
 import { ONE_ } from "../Constantes/constantes";
 
+
 export class GestorPagos implements Descuento {
     private medioPago: MedioPago | undefined;
     private descuentoDelDia: DescuentoDia | undefined;
@@ -18,7 +20,7 @@ export class GestorPagos implements Descuento {
     public constructor(descuentoDia?:DescuentoDia) {
         this.medioPago = undefined;
         this.descuentoDelDia = undefined;
-        this.descuentoEnEfectivo = TEN_PERCENT;
+        this.descuentoEnEfectivo = TEN_PERCENT; //0.9
     }
 
     public setMedioPago(medioPago:MedioPago): void {
@@ -34,19 +36,10 @@ export class GestorPagos implements Descuento {
         return pedido.getPrecio()*this.descuentoEnEfectivo
     }
 
-    //Si hay descuento del dia, 
-    // compararlo con el descuento en efectivo
-    //
-    //No puedo conseguir el monto del descuento en efectivo
-    //Porque el upCasting es con medioPago que solo tiene Pagar()
-    //Asi que, GestorPagos implemento Descuento para:
-    //CalcularDescuento(pedido:Pedido):number
-    //Y hacer la comparacion
-    ////FALTA: DISTINGUIR CUANDO PAGA EN EFECTIVO.
     public cobrar(pedido: Pedido): Factura {
         if (pedido.puedeFacturar()) {
             if (this.medioPago) {
-                const monto:number = pedido.getPrecioFinal()*this.descuentoBeneficioso(pedido);
+                const monto:number = pedido.getPrecioFinal()*this.descuentoBeneficioso();
                 if (this.medioPago.pagar(monto)) {
                     pedido.setEstado(EstadoPedido.FACTURADO);
                     const factura = new Factura(pedido, monto);
@@ -65,15 +58,16 @@ export class GestorPagos implements Descuento {
     }
 
     //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES
-    //FALTA: DISTINGUIR CUANDO PAGA EN EFECTIVO.
-    private descuentoBeneficioso(pedido: Pedido): number {
-        let mayorBeneficio:number=ONE_;
-        if (this.descuentoDelDia==undefined) {
-            mayorBeneficio = this.descuentoEnEfectivo;
+    private descuentoBeneficioso(): number {
+        let mayorBeneficio:number = ONE_;
+
+        if (this.medioPago?.getTipoDePago() === TipoMedioPago.EFECTIVO) {
+            mayorBeneficio = Math.min(mayorBeneficio, this.descuentoEnEfectivo);
         }
-        else if (this.descuentoDelDia.calcularDescuento(pedido) < this.calcularDescuento(pedido)) {
-            mayorBeneficio = this.descuentoDelDia.getPorcentajeDescuento();
+        if (this.descuentoDelDia !== undefined) {
+            mayorBeneficio = Math.min(mayorBeneficio, this.descuentoDelDia.getPorcentajeDescuento());
         }
+
         return mayorBeneficio
     }
 

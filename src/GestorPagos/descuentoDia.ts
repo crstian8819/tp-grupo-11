@@ -1,6 +1,6 @@
 import { Pedido } from "../pedido";
-import { Descuento } from "./descuento";
-export class DescuentoDia implements Descuento {
+//import { Descuento } from "./descuento";
+export class DescuentoDia /*implements Descuento*/ {
     private diaDeLaSemana: string;
     private porcentajeDescuento: number;
 
@@ -22,7 +22,7 @@ export class DescuentoDia implements Descuento {
         return this.porcentajeDescuento
     }
 
-    public calcularDescuento(pedido: Pedido): number {
-        return pedido.getPrecio()*this.porcentajeDescuento
-    }
+    //public calcularDescuento(pedido: Pedido): number {
+    //    return pedido.getPrecio()*this.porcentajeDescuento
+    //}
 }

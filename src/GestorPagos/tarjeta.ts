@@ -1,13 +1,14 @@
 import { MedioPago } from "./medioPago";
 import { TipoTarjeta } from "./tipoTarjeta";
 import { ZERO } from "../Constantes/constantes";
+import { TipoMedioPago } from "./tipoMedioPago";
 
 export class Tarjeta extends MedioPago {
     private numero: number;
     private tipo: TipoTarjeta | undefined;
 
     constructor(numero?:number, tipo?:TipoTarjeta) {
-        super();
+        super(TipoMedioPago.TARJETA);
         this.numero= numero ?? ZERO;
         this.tipo = tipo ?? undefined ;
     }
