@@ -51,4 +51,6 @@ export abstract class Pedido {
         return this.estado === EstadoPedido.CONFIRMADO;
     }
 
+
 }
+

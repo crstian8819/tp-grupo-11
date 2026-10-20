@@ -11,4 +11,12 @@ export class GestorPedidos {
         this.pedidosTotales = new Map();
         this.pedidosFinalizados = new Map();
     }
+
+    public consultarHistorial() {
+        this.pedidosFinalizados.forEach((pedido, id) => {
+            console.log(`Id: ${id} precio del pedido: ${pedido.getPrecioFinal()}`)
+        });
+    }
+
+    
 }
