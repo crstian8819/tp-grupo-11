@@ -1,6 +1,6 @@
 import {Pedido} from "./pedido"
 
-export class pedidoRetirar extends Pedido{
+export class PedidoRetirar extends Pedido{
     private horario : number;
 
     constructor(horario:number){

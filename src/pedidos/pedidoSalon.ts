@@ -1,6 +1,6 @@
 import {Pedido} from "./pedido"
 
-export class pedidoSalon extends Pedido{
+export class PedidoSalon extends Pedido{
     private numeroMesa : number;
 
     constructor(nMesa : number){

@@ -8,7 +8,7 @@ export abstract class Pedido {
     private precioFinal: number;
 
     constructor(){
-        // this.idPedido = this.items.length;
+        // this.idPedido = this.items.length; Pasarlo como coleccion(cantidad) en el gestor de Pedidos
         this.items = new List<ItemIndividual>();
         this.precioFinal = undefined as unknown as number;
         this.estado = EstadoPedido.EN_CONSTRUCION;
@@ -30,7 +30,6 @@ export abstract class Pedido {
         }
     }
 
-    
     public setEstado(ESTADO: EstadoPedido) : void {
         this.estado = ESTADO
     }
