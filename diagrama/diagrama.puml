@@ -116,12 +116,6 @@
         -productos: ItemIndividual[]
     }
 
-    '------------------ BENEFICIO -----------------
-
-    interface Beneficio {
-        +calcularBeneficio(precioBase: number): number
-    }
-
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {
@@ -137,6 +131,11 @@
     class CocinaFria{}
     class Barra{}
 
+    '------------------ BENEFICIO -----------------
+
+    interface Beneficio {
+        +calcularBeneficio(precioBase: number): number
+    }
     '------------------ GESTOR_PAGOS -------------------------
 
     class GestorPagos {
@@ -173,10 +172,6 @@
     }
     
     class BilleteraVirtual{}
-
-    interface Descuento{
-        +calcularDescuento(pedido:Pedido):number
-    }
 
     class DescuentoDia{
         -dia:string
@@ -232,7 +227,7 @@
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
     GestorPagos -u-o Factura
-    GestorPagos -u-o Descuento
+    GestorPagos -u-o Beneficio
 
 'MEDIOS DE PAGO
 
