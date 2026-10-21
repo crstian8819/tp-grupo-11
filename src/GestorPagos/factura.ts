@@ -1,4 +1,4 @@
-import { Pedido } from "../pedido";
+import { Pedido } from "../pedidos/pedido";
 export class Factura {
     private idFactura: string;
     private pedido: Pedido;

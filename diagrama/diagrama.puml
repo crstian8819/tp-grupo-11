@@ -131,10 +131,10 @@
     class CocinaFria{}
     class Barra{}
 
-    '------------------ BENEFICIO -----------------
+    '------------------ DESCUENTO -----------------
 
-    interface Beneficio {
-        +calcularBeneficio(precioBase: number): number
+    interface DescuentoBeneficioso {
+        +calcularDescuento(): number
     }
     '------------------ GESTOR_PAGOS -------------------------
 
@@ -227,7 +227,7 @@
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
     GestorPagos -u-o Factura
-    GestorPagos -u-o Beneficio
+    GestorPagos -u-o DescuentoBeneficioso
 
 'MEDIOS DE PAGO
 

@@ -1,21 +1,21 @@
 import {ItemIndividual} from "../itemIndividual";
-import {estadoPedido as EstadoPedido} from "../estadoPedido";
+import {EstadoItem} from "../estadoItem";
 import {List} from "../estructuraDatos/listaEnlazada";
 
 export abstract class Pedido {
     private items: List<ItemIndividual>;
-    private estado: EstadoPedido;
+    private estado: EstadoItem;
     private precioFinal: number;
 
-    constructor(){
+    constructor() {
         // this.idPedido = this.items.length; Pasarlo como coleccion(cantidad) en el gestor de Pedidos
         this.items = new List<ItemIndividual>();
         this.precioFinal = 0;
-        this.estado = EstadoPedido.EN_CONSTRUCION;
+        this.estado = EstadoItem.EN_PREPARACION;
     }
 
     public puedeModificarse () : boolean {
-        return this.estado === EstadoPedido.EN_CONSTRUCION;
+        return this.estado === EstadoItem.EN_PREPARACION;
     }
 
     public agregarItem(item: ItemIndividual) : void {
@@ -30,7 +30,7 @@ export abstract class Pedido {
         }
     }
 
-    public setEstado(ESTADO: EstadoPedido) : void {
+    public setEstado(ESTADO: EstadoItem) : void {
         this.estado = ESTADO
     }
     
@@ -58,7 +58,7 @@ export abstract class Pedido {
     }
 
     public puedeFacturar() : boolean {
-        return this.estado === EstadoPedido.CONFIRMADO;
+        return this.estado === EstadoItem.LISTO;
     }
 
 

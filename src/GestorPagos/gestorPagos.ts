@@ -3,7 +3,7 @@ import { TipoMedioPago } from "./tipoMedioPago";
 import { DescuentoDia } from "./descuentoDia";
 import { Factura } from "./factura";
 import { Pedido } from "../pedidos/pedido"; 
-import { Descuento } from "./descuento";
+import { DescuentoBeneficioso } from "./descuento";
 import { EstadoItem } from "../estadoItem"
 //ANTES DE MERGEAR LAS RAMAS A DEVELOP
 //->SEPARAR CARPETAS DE ERRORES Y CONSTANTES. MERGEAR ENTRE TODOS.
@@ -12,7 +12,7 @@ import { TEN_PERCENT } from "../Constantes/constantes";
 import { ONE_ } from "../Constantes/constantes";
 
 
-export class GestorPagos implements Descuento {
+export class GestorPagos implements DescuentoBeneficioso {
     private medioPago: MedioPago | undefined;
     private descuentoDelDia: DescuentoDia | undefined;
     private descuentoEnEfectivo: number;
@@ -32,18 +32,15 @@ export class GestorPagos implements Descuento {
         this.descuentoDelDia?.setPorcentajeDescuento(porcentaje);
     }
 
-    public calcularDescuento(pedido: Pedido): number {
-        return pedido.getPrecioFinal()*this.descuentoEnEfectivo
-    }
-
-    public cobrar(pedido: Pedido): Factura {
+    public cobrar(pedido: Pedido): Factura | undefined {
         if (pedido.puedeFacturar()) {
             if (this.medioPago) {
-                const monto:number = pedido.getPrecioFinal()*this.descuentoBeneficioso();
+                const monto:number = pedido.getPrecioFinal()*this.calcularDescuento();
                 if (this.medioPago.pagar(monto)) {
-                    pedido.setEstado(EstadoPedido.FACTURADO);
+                    pedido.setEstado(EstadoItem.LISTO);
                     const factura = new Factura(pedido, monto);
 
+                    return factura
                 } else {
                     throw new ErrorDeFacturacion("Saldo insuficiente.");
                 }
@@ -53,12 +50,13 @@ export class GestorPagos implements Descuento {
         } else {
             throw new ErrorDeFacturacion("El pedido no se encuentra CONFIRMADO.");
         }
+    
+        //return undefined
         
-        return factura
     }
 
     //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES
-    private descuentoBeneficioso(): number {
+    public calcularDescuento(): number {
         let mayorBeneficio:number = ONE_;
 
         if (this.medioPago?.getTipoDePago() === TipoMedioPago.EFECTIVO) {
