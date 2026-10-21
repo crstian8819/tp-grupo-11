@@ -97,14 +97,17 @@
         -precio: number
         
         +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
     }
 
     class ItemIndividual {
         -categoria: Categoria
         -estacion: TipoEstacion
-
+        
         +getCategoria(): Categoria
         +getTipoEstacion(): TipoEstacion
+        +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
     }
 
     class ItemPedido {
@@ -117,9 +120,17 @@
     }
 
     class Combo {
-        -productos: ItemIndividual[]
+        -items: ItemIndividual[]
+        
+        +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
     }
 
+    note right of Combo::getComponentes()
+        
+        return this.items
+    
+    end note
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {

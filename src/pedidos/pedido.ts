@@ -4,6 +4,7 @@ import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
 import { ZERO } from "../Constantes/constantes";
 import { Item } from "../item";
+//import { ItemPedido } from "../itemPedido";
 export abstract class Pedido {
     private items: List<Item>;
     private estado: EstadoPedido;
