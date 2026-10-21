@@ -1,6 +1,6 @@
 export enum Categoria {
-    ENTRADA = "Entrada",
-    PLATO_PRINCIPAL = "Plato Principal",
-    BEBIDA = "Bebida",
-    POSTRE = "Postre"
+    ENTRADA = "ENTRADA",
+    PLATO_PRINCIPAL = "PLATO_PRINCIPAL",
+    BEBIDA = "BEBIDA",
+    POSTRE = "POSTRE"
 }

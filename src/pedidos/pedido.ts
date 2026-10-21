@@ -1,41 +1,43 @@
-import {ItemIndividual} from "../itemIndividual";
-import {EstadoItem} from "../estadoItem";
+//import {ItemIndividual} from "../itemIndividual";
+//import {EstadoItem} from "../estadoItem";
+import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
-
+import { ZERO } from "../Constantes/constantes";
+import { Item } from "../item";
 export abstract class Pedido {
-    private items: List<ItemIndividual>;
-    private estado: EstadoItem;
+    private items: List<Item>;
+    private estado: EstadoPedido;
     private precioFinal: number;
 
     constructor() {
         // this.idPedido = this.items.length; Pasarlo como coleccion(cantidad) en el gestor de Pedidos
-        this.items = new List<ItemIndividual>();
-        this.precioFinal = 0;
-        this.estado = EstadoItem.EN_PREPARACION;
+        this.items = new List<Item>();
+        this.precioFinal = ZERO;
+        this.estado = EstadoPedido.EN_CONSTRUCCION;
     }
 
     public puedeModificarse () : boolean {
-        return this.estado === EstadoItem.EN_PREPARACION;
+        return this.estado === EstadoPedido.EN_CONSTRUCCION;
     }
 
-    public agregarItem(item: ItemIndividual) : void {
+    public agregarItem(item: Item) : void {
         if (this.puedeModificarse()) {
             this.items.push(item);
         }
     }
 
-    public eliminarItem(value : ItemIndividual) : void {
+    public eliminarItem(value : Item) : void {
         if (this.puedeModificarse()) {
             this.items.delete(value);
         }
     }
 
-    public setEstado(ESTADO: EstadoItem) : void {
+    public setEstado(ESTADO: EstadoPedido) : void {
         this.estado = ESTADO
     }
     
     public setPrecioFinal(): void {
-        this.precioFinal = 0;
+        this.precioFinal = ZERO;
         let headAux = this.items.getHead();
         while (headAux) {
             this.precioFinal += headAux.getValue().getPrecio();
@@ -48,7 +50,7 @@ export abstract class Pedido {
         let headAux = this.items.getHead();
         while(headAux) {
             console.log(`Item: ${headAux.getValue().getNombre()}
-            \nCantidad: ${headAux.getValue().getCantidad()}`);
+            \nPrecio: ${headAux.getValue().getPrecio()}`);
             headAux = headAux.getNext();
         }
     }
@@ -58,9 +60,8 @@ export abstract class Pedido {
     }
 
     public puedeFacturar() : boolean {
-        return this.estado === EstadoItem.LISTO;
+        return this.estado === EstadoPedido.CONFIRMADO;
     }
-
 
 }
 

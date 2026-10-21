@@ -1,17 +1,19 @@
 import { EstadoItem } from "./estadoItem"
-import { Producto } from "./producto"
+import { Producto } from "./producto";
+import { Item } from "./item";
 export class ItemPedido {
-        private producto: Producto
-        private estado: EstadoItem
-        private cantidad: number
-        constructor(producto:Producto,cantidad:number){
-            this.producto=producto;
+        private item: Item;
+        private cantidad: number;
+        private estado: EstadoItem;
+
+        constructor(item:Item,cantidad:number) {
+            this.item=item;
             this.cantidad=cantidad;
             this.estado=EstadoItem.PENDIENTE;
         }
 
         public getProducto():Producto{
-            return this.producto;
+            return this.item;
         }
         public getCantidad():number{
             return this.cantidad;

@@ -1,0 +1,5 @@
+export enum EstadoPedido {
+    EN_CONSTRUCCION = "EN_CONSTRUCCION",
+    CONFIRMADO = "CONFIRMADO",
+    FACTURADO = "FACTURADO"
+}

@@ -4,9 +4,7 @@ import { DescuentoDia } from "./descuentoDia";
 import { Factura } from "./factura";
 import { Pedido } from "../pedidos/pedido"; 
 import { DescuentoBeneficioso } from "./descuento";
-import { EstadoItem } from "../estadoItem"
-//ANTES DE MERGEAR LAS RAMAS A DEVELOP
-//->SEPARAR CARPETAS DE ERRORES Y CONSTANTES. MERGEAR ENTRE TODOS.
+import { EstadoPedido } from "../estadoPedido"
 import { ErrorDeFacturacion } from "../Errores/errorDeFacturacion";
 import { TEN_PERCENT } from "../Constantes/constantes";
 import { ONE_ } from "../Constantes/constantes";
@@ -19,7 +17,7 @@ export class GestorPagos implements DescuentoBeneficioso {
 
     public constructor(descuentoDia?:DescuentoDia) {
         this.medioPago = undefined;
-        this.descuentoDelDia = undefined;
+        this.descuentoDelDia = descuentoDia ?? undefined;
         this.descuentoEnEfectivo = TEN_PERCENT; //0.9
     }
 
@@ -27,17 +25,12 @@ export class GestorPagos implements DescuentoBeneficioso {
         this.medioPago=medioPago;
     }
 
-    public setDescuentoDelDia(diaDeLaSemana: string, porcentaje:number): void {
-        this.descuentoDelDia?.setDiaDeLaSemana(diaDeLaSemana);
-        this.descuentoDelDia?.setPorcentajeDescuento(porcentaje);
-    }
-
     public cobrar(pedido: Pedido): Factura | undefined {
         if (pedido.puedeFacturar()) {
             if (this.medioPago) {
                 const monto:number = pedido.getPrecioFinal()*this.calcularDescuento();
                 if (this.medioPago.pagar(monto)) {
-                    pedido.setEstado(EstadoItem.LISTO);
+                    pedido.setEstado(EstadoPedido.FACTURADO);
                     const factura = new Factura(pedido, monto);
 
                     return factura
@@ -48,11 +41,9 @@ export class GestorPagos implements DescuentoBeneficioso {
                 throw new ErrorDeFacturacion("No hay medio de pago.")
             }
         } else {
-            throw new ErrorDeFacturacion("El pedido no se encuentra CONFIRMADO.");
+            throw new ErrorDeFacturacion("El pedido no se encuentra LISTO.");
         }
-    
-        //return undefined
-        
+            
     }
 
     //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES

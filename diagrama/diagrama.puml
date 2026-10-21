@@ -95,16 +95,20 @@
     abstract class Item { 
         -nombre: string
         -precio: number
+        
+        +getPrecio(): number
+    }
+
+    class ItemIndividual {
         -categoria: Categoria
         -estacion: TipoEstacion
 
-        +getPrecio(): number
         +getCategoria(): Categoria
+        +getTipoEstacion(): TipoEstacion
     }
 
-    class ItemIndividual extends Item {}
-
-    class ItemPedido extends Item {
+    class ItemPedido {
+        -item: Item
         -estado: EstadoItem
         -cantidad: number
 
@@ -112,7 +116,7 @@
         +marcarListo():void
     }
 
-    class Combo{
+    class Combo {
         -productos: ItemIndividual[]
     }
 
@@ -194,6 +198,7 @@
 'RESTAURANTE
 
     Restaurante *-r- Menu
+    Restaurante -[hidden]r- Menu
     Restaurante *-- Cocina
     'Restaurante o-- Pedido
     Restaurante *-d- GestorPedidos
@@ -211,8 +216,12 @@
 
     Menu *-- ItemIndividual
     Menu *-d- Combo
-    Combo *-l- ItemIndividual
-    Combo ..|> Producto
+    Combo -l-> ItemIndividual
+    Combo --|> Item
+    ItemIndividual --|> Item
+    Item .r.|> Producto
+    ItemPedido -u-> Item
+
 
 'COCINA
 
@@ -234,18 +243,11 @@
     Efectivo -u-|> MedioPago
     Tarjeta -r-|> MedioPago
     BilleteraVirtual -d-|> MedioPago
-    'Efectivo .d.|> Descuento
 
-'DESCUENTOS
-
-    'DescuentoDia ..|> Descuento
 
 'GESTOR DE PEDIDOS
 
     'HistorialPedido o-- Pedido
     GestorPedidos *-- Pedido
-    'Un pedido contiene exactamente Un registro en historial de Pedidos
-    'HistorialPedido puede contener 0 o muchos pedidos.
 
-    Item .d.|> Producto
 @enduml
