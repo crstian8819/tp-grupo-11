@@ -1,31 +1,41 @@
 @startuml Diagrama de Clases TP
     title "Diagrama de Clases\nTrabajo Práctico"
     
-     enum EstadoPedido{
+     enum EstadoPedido {
         EN_CONSTRUCCION
         CONFIRMADO
         FACTURADO
     }
 
-    enum Categoria{
+    enum Categoria {
         ENTRADA
         PLATO_PRINCIPAL
         BEBIDA
         POSTRE
     }
 
-    enum EstadoItem{
+    enum EstadoItem {
         PENDIENTE
         EN_PREPARACION
         LISTO
     }
-    enum TipoTarjeta{
-        DEBITO
-        CREDITO
+
+    enum TipoEstacion {
+        BARRA
+        COCINA_DULCE
+        COCINA_FRIA
+        PARRILLA
     }
+
+    enum TipoMedioPago {
+        EFECTIVO
+        BILLETERA_VIRTUAL
+        TARJETA
+    }
+
     '-------------Restaurante-Sistema-----------------------
 
-    class Restaurante{
+    class Restaurante {
         -menu:Menu
         -cocinas:Cocina[]
         -gestorPedidos:GestorPedidos
@@ -35,7 +45,7 @@
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
-        -id_pedido: number
+        ' -idPedido: number
         -items: ItemPedido[]
         -estado: EstadoPedido
         -precioFinal: number
@@ -45,8 +55,8 @@
         +sacarItem(item:ItemIndividual):void
         +setEstado(estado: EstadoPedido): void
         +deshacerUltimaModificacion():void
-        +estaListoParaFacturar():boolean
-        +facturar():void
+        +listoParaFacturar():boolean
+        ' +facturar():void
         +calcularTotalCobrar():number
 
     }
@@ -79,33 +89,48 @@
     }
 
     interface Producto {
-
         +getPrecio(): number
     }
 
-    class ItemIndividual {
+    abstract class Item { 
         -nombre: string
         -precio: number
-        -estado: EstadoItem
+        
+        +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
+    }
+
+    class ItemIndividual {
         -categoria: Categoria
+        -estacion: TipoEstacion
+        
+        +getCategoria(): Categoria
+        +getTipoEstacion(): TipoEstacion
+        +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
+    }
+
+    class ItemPedido {
+        -item: Item
+        -estado: EstadoItem
         -cantidad: number
 
-        +getPrecio(): number
-        +getCategoria(): Categoria
         +marcarEnPreparacion():void
         +marcarListo():void
     }
 
     class Combo {
-        -productos: ItemIndividual[]
+        -items: ItemIndividual[]
+        
+        +getPrecio(): number
+        +getComponentes(): ItemIndividual[]
     }
 
-    '------------------ BENEFICIO -----------------
-
-    interface Beneficio {
-        +calcularBeneficio(precioBase: number): number
-    }
-
+    note right of Combo::getComponentes()
+        
+        return this.items
+    
+    end note
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {
@@ -121,19 +146,37 @@
     class CocinaFria{}
     class Barra{}
 
+    '------------------ DESCUENTO -----------------
+
+    interface DescuentoBeneficioso {
+        +calcularDescuento(): number
+    }
     '------------------ GESTOR_PAGOS -------------------------
 
     class GestorPagos {
         -medioPago: MedioPago
+        -descuentoDia: DescuentoDia
 
-        +Cobrar(pedido : Pedido): Factura
+        +calcularDescuento(): number
+        +Cobrar(pedido: Pedido): Factura
+    }
+    '------------------- Factura ------------------------
+    class Factura {
+        -idFactura: string
+        -pedido: Pedido
+        -montoFinal: number
+
+        ----getters----
     }
 
     '------------------- MedioPago ------------------------
 
-    interface MedioPago {
+    abstract MedioPago {
+        #saldoDisponible: number
+        #tipoMedioPago: TipoMedioPago
+        +constructor(tipoPago:TipoMedioPago)
         
-        +Pagar()
+        +Pagar(monto:number): boolean
     }
 
     class Efectivo {}
@@ -144,10 +187,6 @@
     }
     
     class BilleteraVirtual{}
-
-    interface Descuento{
-        +calcularDescuento(pedido:Pedido):number
-    }
 
     class DescuentoDia{
         -dia:string
@@ -170,10 +209,11 @@
 'RESTAURANTE
 
     Restaurante *-r- Menu
+    Restaurante -[hidden]r- Menu
     Restaurante *-- Cocina
     'Restaurante o-- Pedido
     Restaurante *-d- GestorPedidos
-    Restaurante *--l- GestorPagos
+    Restaurante *--l--- GestorPagos
     'Restaurante ..|> Descuento
 
 'PEDIDOS
@@ -181,18 +221,18 @@
     Pedido <|-d- PedidoSalon
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
-    Pedido -r-* ItemIndividual
-    Pedido --* Cocina
-    Pedido ..|> Producto
+    Pedido --* ItemPedido
 
 'MENU
 
-    ItemIndividual ..|> Producto
     Menu *-- ItemIndividual
-    Menu *-- Combo
-    Combo *-- ItemIndividual
-    Combo ..|> Producto
-    Combo *.. Beneficio
+    Menu *-d- Combo
+    Combo -l-> ItemIndividual
+    Combo --|> Item
+    ItemIndividual --|> Item
+    Item .r.|> Producto
+    ItemPedido -u-> Item
+
 
 'COCINA
 
@@ -200,28 +240,25 @@
     CocinaDulce -u-|> Cocina
     CocinaFria -u-|> Cocina
     Barra -u-|> Cocina
+    ItemPedido <-- Cocina
 
 'GESTOR DE PAGOS
 
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
+    GestorPagos -u-o Factura
+    GestorPagos -u-o DescuentoBeneficioso
 
 'MEDIOS DE PAGO
 
     Efectivo -u-|> MedioPago
     Tarjeta -r-|> MedioPago
     BilleteraVirtual -d-|> MedioPago
-    Efectivo .d.|> Descuento
 
-'DESCUENTOS
-
-    DescuentoDia ..|> Descuento
 
 'GESTOR DE PEDIDOS
 
     'HistorialPedido o-- Pedido
     GestorPedidos *-- Pedido
-    'Un pedido contiene exactamente Un registro en historial de Pedidos
-    'HistorialPedido puede contener 0 o muchos pedidos.
 
 @enduml

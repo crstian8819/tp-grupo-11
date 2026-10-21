@@ -1,21 +1,26 @@
 import {Categoria} from "./categoria";
-import {EstadoItem} from "./estadoItem";
-
-export class ItemIndividual {
-    private nombre: string;
-    private precio: number;
-    private estado: EstadoItem | undefined;
-    private categoria: Categoria | undefined;
+import { TipoEstacion } from "./cocina/tipoEstacion";
+import { ZERO } from "./Constantes/constantes";
+import { UNNAMED } from "./Constantes/constantes";
+import { Item } from "./item";
+export class ItemIndividual extends Item {
     private cantidad: number;
+    private categoria: Categoria | undefined;
+    private estacion: TipoEstacion | undefined;
 
-    public constructor (estado?:EstadoItem, categoria?:Categoria) {
-        this.nombre = "";
-        this.precio = 0;
-        this.cantidad = 0;
-        this.estado = estado;
-        this.categoria = categoria;
+    public constructor (categoria?:Categoria, estacion?:TipoEstacion) {
+        super();
+        this.nombre = UNNAMED;
+        this.precio = ZERO;
+        this.cantidad = ZERO;
+        this.categoria = categoria ?? undefined;
+        this.estacion = estacion ?? undefined;
     }
 
+    public getPrecio () : number {
+        return this.precio * this.cantidad;
+    }
+    
     public setNombre (nombre:string) :void {
         this.nombre = nombre;
     }
@@ -28,31 +33,28 @@ export class ItemIndividual {
         this.cantidad = cantidad;
     }
 
-    public setEstado (estado:EstadoItem) : void {
-        this.estado = estado;
-    }
-
     public setCategoria (categoria:Categoria) : void {
         this.categoria = categoria;
+    }
+
+    public setTipoEstacion (estacion:TipoEstacion) : void {
+        this.estacion = estacion;
     }
 
     public getNombre () : string {
         return this.nombre;
     }
 
-    public getPrecio () : number {
-        return this.precio;
-    }
-
     public getCantidad () : number {
         return this.cantidad;
     }
 
-    public getEstado () : EstadoItem|undefined {
-        return this.estado;
-    }
-    
     public getCategoria () : Categoria|undefined {
         return this.categoria;
     }
+
+    public getTipoEstacion () : TipoEstacion|undefined {
+        return this.estacion;
+    }
+
 }
