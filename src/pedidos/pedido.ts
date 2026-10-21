@@ -10,7 +10,7 @@ export abstract class Pedido {
     constructor(){
         // this.idPedido = this.items.length; Pasarlo como coleccion(cantidad) en el gestor de Pedidos
         this.items = new List<ItemIndividual>();
-        this.precioFinal = undefined as unknown as number;
+        this.precioFinal = 0;
         this.estado = EstadoPedido.EN_CONSTRUCION;
     }
 
@@ -34,14 +34,15 @@ export abstract class Pedido {
         this.estado = ESTADO
     }
     
-    // public setPrecioFinal(): void {
-    //     this.precioFinal = 0;
+    public setPrecioFinal(): void {
+        this.precioFinal = 0;
+        let headAux = this.items.getHead();
+        while (headAux) {
+            this.precioFinal += headAux.getValue().getPrecio();
+            headAux = headAux.getNext();
+        }
 
-    //     for (const item of this.items) {
-    //         this.precioFinal += item.getPrecio();
-    //     }
-
-    // }
+    }
     
     public getPrecioFinal() : number {
         return this.precioFinal;

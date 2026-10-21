@@ -7,6 +7,9 @@ export class List<T> {
         this.head = undefined as unknown as MyNode<T>;
     }
 
+    public getHead() : MyNode<T> {
+        return this.head;
+    }
     public push(value: T): MyNode<T> {
         const node = new MyNode(value);
         let headAux = this.head;
