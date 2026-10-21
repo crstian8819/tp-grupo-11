@@ -2,9 +2,9 @@ import { MedioPago } from "./medioPago";
 import { TipoMedioPago } from "./tipoMedioPago";
 import { DescuentoDia } from "./descuentoDia";
 import { Factura } from "./factura";
-import { Pedido } from "../pedido";
+import { Pedido } from "../pedidos/pedido"; 
 import { Descuento } from "./descuento";
-import { estadoPedido as EstadoPedido } from "../estadoPedido"
+import { EstadoItem } from "../estadoItem"
 //ANTES DE MERGEAR LAS RAMAS A DEVELOP
 //->SEPARAR CARPETAS DE ERRORES Y CONSTANTES. MERGEAR ENTRE TODOS.
 import { ErrorDeFacturacion } from "../Errores/errorDeFacturacion";
@@ -33,7 +33,7 @@ export class GestorPagos implements Descuento {
     }
 
     public calcularDescuento(pedido: Pedido): number {
-        return pedido.getPrecio()*this.descuentoEnEfectivo
+        return pedido.getPrecioFinal()*this.descuentoEnEfectivo
     }
 
     public cobrar(pedido: Pedido): Factura {

@@ -1,28 +1,41 @@
 @startuml Diagrama de Clases TP
     title "Diagrama de Clases\nTrabajo Práctico"
     
-     enum EstadoPedido{
+     enum EstadoPedido {
         EN_CONSTRUCCION
         CONFIRMADO
         FACTURADO
     }
 
-    enum Categoria{
+    enum Categoria {
         ENTRADA
         PLATO_PRINCIPAL
         BEBIDA
         POSTRE
     }
 
-    enum EstadoItem{
+    enum EstadoItem {
         PENDIENTE
         EN_PREPARACION
         LISTO
     }
 
+    enum TipoEstacion {
+        BARRA
+        COCINA_DULCE
+        COCINA_FRIA
+        PARRILLA
+    }
+
+    enum TipoMedioPago {
+        EFECTIVO
+        BILLETERA_VIRTUAL
+        TARJETA
+    }
+
     '-------------Restaurante-Sistema-----------------------
 
-    class Restaurante{
+    class Restaurante {
         -menu:Menu
         -cocinas:Cocina[]
         -gestorPedidos:GestorPedidos
@@ -32,7 +45,7 @@
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
-        ' -id_pedido: number
+        ' -idPedido: number
         -items: ItemPedido[]
         -estado: EstadoPedido
         -precioFinal: number
@@ -79,21 +92,17 @@
         +getPrecio(): number
     }
 
-    abstract class Item{ 
+    abstract class Item { 
         -nombre: string
         -precio: number
+        -categoria: Categoria
+        -estacion: TipoEstacion
 
         +getPrecio(): number
-    }
-
-    class ItemIndividual extends Item{
-        -categoria: Categoria
-
-
-
         +getCategoria(): Categoria
-
     }
+
+    class ItemIndividual extends Item {}
 
     class ItemPedido extends Item {
         -estado: EstadoItem
@@ -132,15 +141,28 @@
 
     class GestorPagos {
         -medioPago: MedioPago
+        -descuentoDia: DescuentoDia
 
-        +Cobrar(pedido : Pedido): Factura
+        +calcularDescuento(): number
+        +Cobrar(pedido: Pedido): Factura
+    }
+    '------------------- Factura ------------------------
+    class Factura {
+        -idFactura: string
+        -pedido: Pedido
+        -montoFinal: number
+
+        ----getters----
     }
 
     '------------------- MedioPago ------------------------
 
-    interface MedioPago {
+    abstract MedioPago {
+        #saldoDisponible: number
+        #tipoMedioPago: TipoMedioPago
+        +constructor(tipoPago:TipoMedioPago)
         
-        +Pagar()
+        +Pagar(monto:number): boolean
     }
 
     class Efectivo {}
@@ -180,7 +202,7 @@
     Restaurante *-- Cocina
     'Restaurante o-- Pedido
     Restaurante *-d- GestorPedidos
-    Restaurante *--l- GestorPagos
+    Restaurante *--l--- GestorPagos
     'Restaurante ..|> Descuento
 
 'PEDIDOS
@@ -209,17 +231,19 @@
 
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
+    GestorPagos -u-o Factura
+    GestorPagos -u-o Descuento
 
 'MEDIOS DE PAGO
 
     Efectivo -u-|> MedioPago
     Tarjeta -r-|> MedioPago
     BilleteraVirtual -d-|> MedioPago
-    Efectivo .d.|> Descuento
+    'Efectivo .d.|> Descuento
 
 'DESCUENTOS
 
-    DescuentoDia ..|> Descuento
+    'DescuentoDia ..|> Descuento
 
 'GESTOR DE PEDIDOS
 
