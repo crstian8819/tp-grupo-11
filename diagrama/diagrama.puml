@@ -19,10 +19,7 @@
         EN_PREPARACION
         LISTO
     }
-    enum TipoTarjeta{
-        DEBITO
-        CREDITO
-    }
+
     '-------------Restaurante-Sistema-----------------------
 
     class Restaurante{
@@ -35,7 +32,7 @@
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
-        -id_pedido: number
+        ' -id_pedido: number
         -items: ItemPedido[]
         -estado: EstadoPedido
         -precioFinal: number
@@ -45,8 +42,8 @@
         +sacarItem(item:ItemIndividual):void
         +setEstado(estado: EstadoPedido): void
         +deshacerUltimaModificacion():void
-        +estaListoParaFacturar():boolean
-        +facturar():void
+        +listoParaFacturar():boolean
+        ' +facturar():void
         +calcularTotalCobrar():number
 
     }
@@ -79,24 +76,34 @@
     }
 
     interface Producto {
+        +getPrecio(): number
+    }
+
+    abstract class Item{ 
+        -nombre: string
+        -precio: number
 
         +getPrecio(): number
     }
 
-    class ItemIndividual {
-        -nombre: string
-        -precio: number
-        -estado: EstadoItem
+    class ItemIndividual extends Item{
         -categoria: Categoria
+
+
+
+        +getCategoria(): Categoria
+
+    }
+
+    class ItemPedido extends Item {
+        -estado: EstadoItem
         -cantidad: number
 
-        +getPrecio(): number
-        +getCategoria(): Categoria
         +marcarEnPreparacion():void
         +marcarListo():void
     }
 
-    class Combo {
+    class Combo{
         -productos: ItemIndividual[]
     }
 
@@ -181,18 +188,14 @@
     Pedido <|-d- PedidoSalon
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
-    Pedido -r-* ItemIndividual
-    Pedido --* Cocina
-    Pedido ..|> Producto
+    Pedido --* ItemPedido
 
 'MENU
 
-    ItemIndividual ..|> Producto
     Menu *-- ItemIndividual
-    Menu *-- Combo
-    Combo *-- ItemIndividual
+    Menu *-d- Combo
+    Combo *-l- ItemIndividual
     Combo ..|> Producto
-    Combo *.. Beneficio
 
 'COCINA
 
@@ -200,6 +203,7 @@
     CocinaDulce -u-|> Cocina
     CocinaFria -u-|> Cocina
     Barra -u-|> Cocina
+    ItemPedido <-- Cocina
 
 'GESTOR DE PAGOS
 
@@ -224,4 +228,5 @@
     'Un pedido contiene exactamente Un registro en historial de Pedidos
     'HistorialPedido puede contener 0 o muchos pedidos.
 
+    Item .d.|> Producto
 @enduml

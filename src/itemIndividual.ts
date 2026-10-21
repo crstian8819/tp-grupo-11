@@ -41,7 +41,7 @@ export class ItemIndividual {
     }
 
     public getPrecio () : number {
-        return this.precio;
+        return this.precio * this.cantidad;
     }
 
     public getCantidad () : number {
