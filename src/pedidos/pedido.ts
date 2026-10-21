@@ -43,6 +43,15 @@ export abstract class Pedido {
         }
 
     }
+
+    public listItems(): void {
+        let headAux = this.items.getHead();
+        while(headAux) {
+            console.log(`Item: ${headAux.getValue().getNombre()}
+            \nCantidad: ${headAux.getValue().getCantidad()}`);
+            headAux = headAux.getNext();
+        }
+    }
     
     public getPrecioFinal() : number {
         return this.precioFinal;
