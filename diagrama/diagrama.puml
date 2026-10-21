@@ -104,9 +104,11 @@
         -nombre: string
         -precio: number
         -categoria: Categoria
+        -estacion:TipoEstacion
 
         +getPrecio(): number
         +getCategorias(): Categoria[]
+        +getEstacion():TipoEstacion
     }
 
     class Combo  {
@@ -141,7 +143,7 @@
     BeneficioPorcentual ..|> Beneficio
     BeneficioPrecioFijo ..|> Beneficio
 
-    Combo ..|> Beneficio
+    Combo *.. Beneficio
 
 
     '------------------ ITEMS -----------------
@@ -152,9 +154,9 @@
         -cantidad: number
         
 
-        +marcarEnPreparacion():void
-        +marcarListo():void
+        +avanzarEstado():void
         +puedeModificarse():boolean
+        +getEstado():EstadoItem
     }
 
 
@@ -162,11 +164,13 @@
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {
-        -nombre:string
-        -items: ItemPedido[]
+        #nombre:string
+        #items: ItemPedido[]
+        #tipo:TipoEstacion
 
         +recibirItem(item: ItemPedido): void
         +procesarSiguiente(): void
+        +atender(estacion: TipoEstacion): boolean
     }
 
     class Parrilla{}

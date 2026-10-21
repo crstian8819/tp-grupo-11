@@ -1,3 +1,9 @@
 import { Cocina } from "./cocina";
-
-export class CocinaFria extends Cocina{}
+import { Categoria } from "./categoria";
+import { TipoEstacion } from "./tipoEstacion";
+export class CocinaFria extends Cocina{
+constructor(){
+    super("Cocina Fria",TipoEstacion.COCINA_FRIA);
+}
+    
+}

@@ -26,7 +26,7 @@ export class ItemPedido {
         private static readonly SIGUIENTE_ESTADO = new Map< EstadoItem,EstadoItem>([
             [EstadoItem.PENDIENTE,EstadoItem.EN_PREPARACION],
             [EstadoItem.EN_PREPARACION,EstadoItem.LISTO],
-            [EstadoItem.LISTO,EstadoItem.LISTO],
+            
         ]);
         public avanzarEstado():void{
             const siguiente =ItemPedido.SIGUIENTE_ESTADO.get(this.estado);
