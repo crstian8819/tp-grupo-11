@@ -12,7 +12,7 @@ export class ItemPedido {
             this.estado=EstadoItem.PENDIENTE;
         }
 
-        public getProducto():Producto{
+        public getItem():Item{
             return this.item;
         }
         public getCantidad():number{
