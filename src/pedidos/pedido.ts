@@ -3,16 +3,16 @@
 import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
 import { ZERO } from "../Constantes/constantes";
-import { Item } from "../item";
+import { ItemPedido } from "../itemPedido";
 //import { ItemPedido } from "../itemPedido";
 export abstract class Pedido {
-    private items: List<Item>;
+    private items: List<ItemPedido>;
     private estado: EstadoPedido;
     private precioFinal: number;
 
     constructor() {
         // this.idPedido = this.items.length; Pasarlo como coleccion(cantidad) en el gestor de Pedidos
-        this.items = new List<Item>();
+        this.items = new List<ItemPedido>();
         this.precioFinal = ZERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
     }
@@ -21,13 +21,13 @@ export abstract class Pedido {
         return this.estado === EstadoPedido.EN_CONSTRUCCION;
     }
 
-    public agregarItem(item: Item) : void {
+    public agregarItem(item: ItemPedido) : void {
         if (this.puedeModificarse()) {
             this.items.push(item);
         }
     }
 
-    public eliminarItem(value : Item) : void {
+    public eliminarItem(value : ItemPedido) : void {
         if (this.puedeModificarse()) {
             this.items.delete(value);
         }
