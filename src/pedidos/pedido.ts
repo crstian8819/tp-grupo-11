@@ -41,7 +41,7 @@ export abstract class Pedido {
         this.precioFinal = ZERO;
         let headAux = this.items.getHead();
         while (headAux) {
-            this.precioFinal += headAux.getValue().getItem().getPrecio();
+            this.precioFinal += headAux.getValue().getProducto().getPrecio();
             headAux = headAux.getNext();
         }
 
@@ -50,8 +50,8 @@ export abstract class Pedido {
     public listItems(): void {
         let headAux = this.items.getHead();
         while(headAux) {
-            console.log(`Item: ${headAux.getValue().getItem().getNombre()}
-            \nPrecio: ${headAux.getValue().getItem()}`);
+            console.log(`Item: ${headAux.getValue().getProducto().getNombre()}
+            \nPrecio: ${headAux.getValue().getProducto()}`);
             headAux = headAux.getNext();
         }
     }
