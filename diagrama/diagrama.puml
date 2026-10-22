@@ -198,13 +198,18 @@
     '-------------------- Gestor de Pedidos ------------------------
 
     class GestorPedidos{
+        -pedidosTotales: Map<number, Pedido>
+        -cantidadPedidos: number
         -pedidosFinalizados:Map<number, Pedido>
 
-        +consultarHistorial():void
-        +crearPedido() : Pedido
-        +confirmarPedido(pedido:Pedido):void
-        +registrarPedido(pedido:Pedido):void
+        +consultarHistorial(): void
+        +registrarPedidoFinalizado(): void
+        +crearPedidoSalon(mesa:number): void
+        +crearPedidoRetirar(horario:number): void
+        +crearPedidoEnvio(direccion:string): void
+        +registrarPedido(pedido:Pedido): void
     }
+        '+confirmarPedido(pedido:Pedido): void
 
     '-------------------- RELACIONES ------------------------
 

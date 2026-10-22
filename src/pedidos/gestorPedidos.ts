@@ -21,6 +21,11 @@ export class GestorPedidos {
         });
     }
 
+    //FALTA IMPLEMENTACION.
+    public registrarPedidoFinalizado():void {
+        
+    }
+
     public crearPedidoSalon(mesa : number): void {
         const pedido = new PedidoSalon(mesa);
         this.registrarPedido(pedido)
