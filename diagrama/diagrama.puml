@@ -259,6 +259,6 @@
 'GESTOR DE PEDIDOS
 
     'HistorialPedido o-- Pedido
-    GestorPedidos *-- Pedido
+    GestorPedidos o--> Pedido
 
 @enduml
