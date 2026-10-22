@@ -2,9 +2,12 @@ import {Pedido} from "./pedido"
 import {PedidoEnvio} from "./pedidoEnvio"
 import {PedidoRetirar} from "./pedidoRetirar"
 import {PedidoSalon} from "./pedidoSalon"
+import { ZERO } from "../Constantes/constantes";
+
 
 export class GestorPedidos {
     private pedidosTotales: Map<number, Pedido>;
+    private cantidadPedidos : number = ZERO;
     private pedidosFinalizados: Map<number, Pedido>;
 
     constructor(){
@@ -18,5 +21,26 @@ export class GestorPedidos {
         });
     }
 
-    
+    public crearPedidoSalon(mesa : number): void {
+        const pedido = new PedidoSalon(mesa);
+        this.registrarPedido(pedido)
+    }
+
+    public crearPedidoRetirar(horario : number): void {
+        const pedido = new PedidoRetirar(horario);
+        this.registrarPedido(pedido)
+
+    }
+
+    public crearPedidoEnvio(direccion : string): void {
+        const pedido = new PedidoEnvio(direccion);
+        this.registrarPedido(pedido)
+
+    }
+
+    private registrarPedido(pedido: Pedido): void {
+        pedido.setID(this.cantidadPedidos)
+        this.pedidosTotales.set(pedido.getId(), pedido)
+        this.cantidadPedidos++;
+    }
 }
