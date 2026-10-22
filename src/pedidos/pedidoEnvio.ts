@@ -1,9 +1,9 @@
 import {Pedido} from "./pedido"
 
-export class PedidoEnvio extends Pedido{
+export class PedidoEnvio extends Pedido {
     private direccion : string;
     private costoEnvio : number;
-    constructor(direccion : string){
+    constructor(direccion : string) {
         super()
         this.direccion = direccion;
         this.costoEnvio = undefined as unknown as number;

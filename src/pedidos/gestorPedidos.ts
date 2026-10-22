@@ -10,7 +10,7 @@ export class GestorPedidos {
     private cantidadPedidos : number = ZERO;
     private pedidosFinalizados: Map<number, Pedido>;
 
-    constructor(){
+    constructor() {
         this.pedidosTotales = new Map();
         this.pedidosFinalizados = new Map();
     }

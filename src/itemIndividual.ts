@@ -5,16 +5,16 @@ import { UNNAMED } from "./Constantes/constantes";
 import { Item } from "./item";
 export class ItemIndividual extends Item {
     private cantidad: number;
-    private categoria: Categoria | undefined;
-    private estacion: TipoEstacion | undefined;
+    private categoria: Categoria;
+    private estacion: TipoEstacion;
 
-    public constructor (categoria?:Categoria, estacion?:TipoEstacion) {
+    public constructor (categoria:Categoria, estacion:TipoEstacion) {
         super();
         this.nombre = UNNAMED;
         this.precio = ZERO;
         this.cantidad = ZERO;
-        this.categoria = categoria ?? undefined;
-        this.estacion = estacion ?? undefined;
+        this.categoria = categoria;
+        this.estacion = estacion;
     }
 
     public getPrecio () : number {
@@ -33,13 +33,14 @@ export class ItemIndividual extends Item {
         this.cantidad = cantidad;
     }
 
-    public setCategoria (categoria:Categoria) : void {
+    //METODOS COMENTADOS YA QUE UN ITEM DEBE CREARSE CON: TipoEstacion y Categoria.
+    /*public setCategoria (categoria:Categoria) : void {
         this.categoria = categoria;
-    }
+    }*/
 
-    public setTipoEstacion (estacion:TipoEstacion) : void {
+    /*public setTipoEstacion (estacion:TipoEstacion) : void {
         this.estacion = estacion;
-    }
+    }*/
 
     public getNombre () : string {
         return this.nombre;
@@ -49,12 +50,13 @@ export class ItemIndividual extends Item {
         return this.cantidad;
     }
 
-    public getCategoria () : Categoria|undefined {
-        return this.categoria;
+    // el ! indica al compilador que confíe en que existe la categoria,etc.
+    public getCategoria () : Categoria {
+        return this.categoria!;
     }
 
-    public getTipoEstacion () : TipoEstacion|undefined {
-        return this.estacion;
+    public getTipoEstacion () : TipoEstacion {
+        return this.estacion!;
     }
 
 }

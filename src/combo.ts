@@ -3,19 +3,19 @@ import { Producto } from "./producto";
 import { Beneficio } from "./beneficio";
 
 export class Combo implements Producto {
-    private productos: ItemIndividual[];
+    private items: ItemIndividual[];
     private beneficio: Beneficio;
 
     constructor(productos: ItemIndividual[], beneficio: Beneficio) {
         if (productos.length < 2) {
             throw new Error("Un combo debe tener al menos 2 productos");
         }
-        this.productos = productos;
+        this.items = productos;
         this.beneficio = beneficio;
     }
 
     public getPrecio(): number {
-        const suma = this.productos.reduce(
+        const suma = this.items.reduce(
             (total, item) => total + item.getPrecio(),
             0
         );
@@ -23,6 +23,6 @@ export class Combo implements Producto {
     }
 
     public getProductos(): ItemIndividual[] {
-        return [...this.productos];
+        return [...this.items];
     }
 }
