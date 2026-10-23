@@ -11,4 +11,8 @@ export class PedidoRetirar extends Pedido {
     public getHorario() : number {
         return this.horario;
     }
+
+    public setHorario(horario: number): void {
+        this.horario = horario;
+    }
 }

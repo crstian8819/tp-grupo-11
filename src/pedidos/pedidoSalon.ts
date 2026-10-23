@@ -11,4 +11,8 @@ export class PedidoSalon extends Pedido {
     public getNumeroMesa() : number {
         return this.numeroMesa;
     }
+
+    public setNumeroMesa(nMesa: number): void {
+        this.numeroMesa = nMesa;
+    }
 }
