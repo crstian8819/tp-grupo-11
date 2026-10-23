@@ -1,23 +1,26 @@
 import { EstadoItem } from "./estadoItem"
 import { Producto } from "./producto";
-import { Item } from "./item";
 export class ItemPedido {
-        private item: Item;
+        private item: Producto;
         private cantidad: number;
         private estado: EstadoItem;
 
-        constructor(item:Item,cantidad:number) {
+        constructor(item:Producto,cantidad:number) {
             this.item=item;
             this.cantidad=cantidad;
             this.estado=EstadoItem.PENDIENTE;
         }
 
-        public getProducto():Item {
+        public getProducto():Producto {
             return this.item;
         }
         
         public getCantidad():number {
             return this.cantidad;
+        }
+
+        public getTotal() : number {
+            return this.item.getPrecio() * this.cantidad;
         }
 
         public getEstado():EstadoItem {
