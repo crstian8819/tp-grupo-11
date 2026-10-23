@@ -27,7 +27,7 @@ export class ItemPedido {
             return this.cantidad;
         }
 
-        public getSubTotal() : number {
+        public getTotal() : number {
             return this.item.getPrecio() * this.cantidad;
         }
         public agregarPreparacion(p:ItemPedido):void{

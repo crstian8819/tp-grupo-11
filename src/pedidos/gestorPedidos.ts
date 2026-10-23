@@ -19,9 +19,10 @@ export class GestorPedidos {
     }
 
 
-    public crearPedidoSalon(mesa : number): void {
+    public crearPedidoSalon(mesa : number): Pedido {
         const pedido = new PedidoSalon(mesa);
-        this.registrarPedido(pedido)
+        this.registrarPedido(pedido);
+        return pedido;
     }
 
     public crearPedidoRetirar(horario : number): Pedido {
