@@ -2,7 +2,7 @@ import { EstadoItem } from "../estadoItem";
 import { EstadoPreparacion } from "./estadoPreparacion";
 import { ItemPedido } from "../itemPedido";
 
-export class Listo implements EstadoPreparacion{
+export class Listo implements EstadoPreparacion {
     public getNombre(): EstadoItem {
         return EstadoItem.LISTO;
     }

@@ -22,16 +22,16 @@ export abstract class Cocina {
         return [...this.items];
     }
     
-    public setSiguiente(cocina:Cocina):Cocina{
+    public setSiguiente(cocina:Cocina):Cocina {
         this.siguiente=cocina;
         return cocina;
     }
 
-    public buscarCocina(estacion:TipoEstacion):Cocina{
-        if(this.atiende(estacion)){
+    public buscarCocina(estacion:TipoEstacion):Cocina {
+        if (this.atiende(estacion)) {
             return this;
         }
-        if(!this.siguiente){
+        if (!this.siguiente) {
             throw new Error(`No hay una cocina disponible para la estación ${estacion}`);
 
         }

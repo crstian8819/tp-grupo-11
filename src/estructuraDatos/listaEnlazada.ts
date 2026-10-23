@@ -13,7 +13,7 @@ export class List<T> {
     public push(value: T): MyNode<T> {
         const node = new MyNode(value);
         let headAux = this.head;
-        while(headAux && headAux.getNext()) {
+        while (headAux && headAux.getNext()) {
         headAux = headAux.getNext();
         }
         if (!headAux) {
@@ -29,7 +29,7 @@ export class List<T> {
         let value = undefined;
         let headAux = this.head;
         let previous:MyNode<T> = undefined as unknown as MyNode<T>;
-        while(headAux && headAux.getNext()) {
+        while (headAux && headAux.getNext()) {
         previous = headAux;
         headAux = headAux.getNext();
         }
@@ -63,7 +63,7 @@ export class List<T> {
         const node = new MyNode(value);
         let headAux = this.head;
         let previous:MyNode<T> = undefined as unknown as MyNode<T>;
-        while(headAux && headAux.getValue() < value) {
+        while (headAux && headAux.getValue() < value) {
         previous = headAux;
         headAux = headAux.getNext();
         }
@@ -88,7 +88,7 @@ export class List<T> {
     public delete(value: T): T {
         let headAux = this.head;
         let previous:MyNode<T> = undefined as unknown as MyNode<T>;
-        while(headAux && headAux.getValue() !== value) {
+        while (headAux && headAux.getValue() !== value) {
         previous = headAux;
         headAux = headAux.getNext();
         }
@@ -103,7 +103,7 @@ export class List<T> {
 
     public search(value: T): MyNode<T> {
         let headAux = this.head;
-        while(headAux && headAux.getValue() !== value) {
+        while (headAux && headAux.getValue() !== value) {
         headAux = headAux.getNext();
         }
         return headAux;
@@ -111,8 +111,8 @@ export class List<T> {
 
     public sort(): void {
         let value: T;
-        let listAux = new List<T>();
-        while(this.head) {
+        const listAux = new List<T>();
+        while (this.head) {
         value = this.removeFirst();
         listAux.insertOrdered(value);
         }
@@ -121,7 +121,7 @@ export class List<T> {
     }
 
     public clear(): void {
-        while(this.head){
+        while (this.head) {
         this.removeFirst();
         }
     }

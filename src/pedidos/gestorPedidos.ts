@@ -2,10 +2,6 @@ import { Pedido } from "./pedido";
 import { PedidoEnvio } from "./pedidoEnvio";
 import { PedidoRetirar } from "./pedidoRetirar";
 import { PedidoSalon } from "./pedidoSalon";
-import { EstadoPedido } from "../estadoPedido";
-import { Cocina } from "../cocina/cocina";
-import { ItemIndividual } from "../itemIndividual";
-import { Combo } from "../combo";
 import { ZERO } from "../Constantes/constantes";
 import { Factura } from "../GestorPagos/factura";
 export class GestorPedidos {

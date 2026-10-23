@@ -95,7 +95,7 @@ export abstract class Pedido {
 
     public listItems(): void {
         let headAux = this.items.getHead();
-        while(headAux) {
+        while (headAux) {
             console.log(`Item: ${headAux.getValue().getProducto().getNombre()}
             \nPrecio: ${headAux.getValue().getProducto()}`);
             headAux = headAux.getNext();

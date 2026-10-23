@@ -1,5 +1,4 @@
 import { ItemIndividual } from "./itemIndividual";
-import { Producto } from "./producto";
 import { Beneficio } from "./beneficio";
 import { Item } from "./item";
 

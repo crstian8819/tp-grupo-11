@@ -3,7 +3,7 @@ import { EstadoItem } from "../estadoItem";
 import { EstadoPreparacion } from "./estadoPreparacion";
 import { ItemPedido } from "../itemPedido";
 
-export class Pendiente implements EstadoPreparacion{
+export class Pendiente implements EstadoPreparacion {
     public getNombre(): EstadoItem {
         return EstadoItem.PENDIENTE;
     }

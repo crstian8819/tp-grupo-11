@@ -1,4 +1,4 @@
-import type{ ItemIndividual } from "./itemIndividual";
+import type { ItemIndividual } from "./itemIndividual";
 
 export interface Producto {
     getPrecio():number;
