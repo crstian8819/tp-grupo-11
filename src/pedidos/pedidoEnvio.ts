@@ -1,4 +1,5 @@
 import {Pedido} from "./pedido"
+import { ZERO } from "../Constantes/constantes";
 
 export class PedidoEnvio extends Pedido {
     private direccion : string;
@@ -6,7 +7,7 @@ export class PedidoEnvio extends Pedido {
     constructor(direccion : string) {
         super()
         this.direccion = direccion;
-        this.costoEnvio = undefined as unknown as number;
+        this.costoEnvio = ZERO;
     }
 
     public getDireccion() : string {
@@ -17,7 +18,9 @@ export class PedidoEnvio extends Pedido {
         return this.costoEnvio;
     }
 
-    public setCostoEnvio(precio : number) : void {
+    public setCostoEnvio(precio: number): void {
         this.costoEnvio = precio;
+        this.calcularPrecioFinal();
     }
+
 }
