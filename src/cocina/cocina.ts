@@ -1,16 +1,16 @@
 import { EstadoItem } from "../estadoItem";
 import { ItemPedido } from "../itemPedido";
-import { Categoria } from "../categoria";
 import { TipoEstacion } from "./tipoEstacion";
 
 export abstract class Cocina {
-    protected nombre:string
-    protected items:ItemPedido[]
-    protected tipo:TipoEstacion
+    protected nombre:string;
+    protected items:ItemPedido[];
+    protected tipo:TipoEstacion;
+    private siguiente?: Cocina;
 
     constructor(nombre:string,tipo:TipoEstacion) {
         this.nombre=nombre;
-        this.items=[]
+        this.items=[];
         this.tipo=tipo;
     }
     
@@ -19,10 +19,26 @@ export abstract class Cocina {
     }
 
     public getItems():ItemPedido[] {
-        return this.items;
+        return [...this.items];
+    }
+    
+    public setSiguiente(cocina:Cocina):Cocina{
+        this.siguiente=cocina;
+        return cocina;
     }
 
-    public atender(estacion:TipoEstacion):boolean {
+    public buscarCocina(estacion:TipoEstacion):Cocina{
+        if(this.atiende(estacion)){
+            return this;
+        }
+        if(!this.siguiente){
+            throw new Error(`No hay una cocina disponible para la estación ${estacion}`);
+
+        }
+        return this.siguiente.buscarCocina(estacion);
+    }
+
+    public atiende(estacion:TipoEstacion):boolean {
         return this.tipo === estacion;
     }
 
@@ -31,11 +47,11 @@ export abstract class Cocina {
     }
 
     public procesarSiguiente():void {
-        const itemAProcesar=this.items.find(item => item.getEstado() !== EstadoItem.LISTO)
-            if (!itemAProcesar) {
-               throw new Error(`No hay items para procesar en ${this.nombre}`) 
+        const siguiente=this.items.find(item => item.getEstado() !== EstadoItem.LISTO)
+            if (!siguiente) {
+               throw new Error(`No hay ítems para procesar en ${this.nombre}`) 
             }
-            itemAProcesar.avanzarEstado();
+            siguiente.avanzarEstado();
     }
 
 }

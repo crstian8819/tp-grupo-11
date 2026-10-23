@@ -1,6 +1,7 @@
 import { UNNAMED } from "./Constantes/constantes";
 import { ZERO } from "./Constantes/constantes";
 import { Producto } from "./producto";
+import type { ItemIndividual } from "./itemIndividual";
 
 export abstract class Item implements Producto {
     protected nombre:string;
@@ -27,5 +28,5 @@ export abstract class Item implements Producto {
         this.nombre = nombre;
     }
 
-
+    public abstract getComponentes(): ItemIndividual[]; 
 }
