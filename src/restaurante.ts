@@ -13,9 +13,6 @@ export class Restaurante {
         this.menu = new Menu();
         this.cocinas = new Array<Cocina>;
         this.gestorPedidos = new GestorPedidos();
-        this.gestorPagos = new GestorPagos();
+        this.gestorPagos = new GestorPagos(this.gestorPedidos);
     }
-
-    
-
 }
