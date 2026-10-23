@@ -1,10 +1,9 @@
 import {Categoria} from "./categoria";
 import { TipoEstacion } from "./cocina/tipoEstacion";
-import { ZERO } from "./Constantes/constantes";
-import { UNNAMED } from "./Constantes/constantes";
+import { ZERO, UNNAMED } from "./Constantes/constantes";
 import { Item } from "./item";
+
 export class ItemIndividual extends Item {
-    private cantidad: number;
     private categoria: Categoria;
     private estacion: TipoEstacion;
 
@@ -12,13 +11,12 @@ export class ItemIndividual extends Item {
         super();
         this.nombre = UNNAMED;
         this.precio = ZERO;
-        this.cantidad = ZERO;
         this.categoria = categoria;
         this.estacion = estacion;
     }
 
     public getPrecio () : number {
-        return this.precio * this.cantidad;
+        return this.precio;
     }
     
     public setNombre (nombre:string) :void {
@@ -27,10 +25,6 @@ export class ItemIndividual extends Item {
 
     public setPrecio (precio:number) : void {
         this.precio = precio;
-    }
-
-    public setCantidad (cantidad:number) : void {
-        this.cantidad = cantidad;
     }
 
     //METODOS COMENTADOS YA QUE UN ITEM DEBE CREARSE CON: TipoEstacion y Categoria.
@@ -44,10 +38,6 @@ export class ItemIndividual extends Item {
 
     public getNombre () : string {
         return this.nombre;
-    }
-
-    public getCantidad () : number {
-        return this.cantidad;
     }
 
     // el ! indica al compilador que confíe en que existe la categoria,etc.
