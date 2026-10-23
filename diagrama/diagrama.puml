@@ -167,8 +167,10 @@
         -idFactura: string
         -pedido: Pedido
         -montoFinal: number
-
-        ----getters----
+        +constructor(pedido:Pedido, montoFinal:number)
+        +setIdFactura(idFactura:number):void
+        +getIdFactura():number
+        +getInfoPedido(): string
     }
 
     '------------------- MedioPago ------------------------
@@ -200,10 +202,11 @@
     class GestorPedidos{
         -pedidosTotales: Map<number, Pedido>
         -cantidadPedidos: number
-        -pedidosFinalizados:Map<number, Pedido>
+        -pedidosFinalizados:Map<number, Factura>
 
         +consultarHistorial(): void
-        +registrarPedidoFinalizado(): void
+        +registrarPedidoFinalizado(factura:Factura): void
+        -getCantidadPedidosFinalizados(): number
         +crearPedidoSalon(mesa:number): void
         +crearPedidoRetirar(horario:number): void
         +crearPedidoEnvio(direccion:string): void
@@ -255,6 +258,7 @@
     GestorPagos --o DescuentoDia
     GestorPagos -u-o Factura
     GestorPagos -u-o DescuentoBeneficioso
+    GestorPagos --> GestorPedidos
 
 'MEDIOS DE PAGO
 

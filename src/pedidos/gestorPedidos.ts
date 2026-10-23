@@ -7,11 +7,11 @@ import { Cocina } from "../cocina/cocina";
 import { ItemIndividual } from "../itemIndividual";
 import { Combo } from "../combo";
 import { ZERO } from "../Constantes/constantes";
-
+import { Factura } from "../GestorPagos/factura";
 export class GestorPedidos {
     private pedidosTotales: Map<number, Pedido>;
     private cantidadPedidos : number = ZERO;
-    private pedidosFinalizados: Map<number, Pedido>;
+    private pedidosFinalizados: Map<number, Factura>;
 
     constructor() {
         this.pedidosTotales = new Map();
@@ -55,27 +55,26 @@ export class GestorPedidos {
         //falta implementacion
     }
 
-    public registrarPedidoFinalizado(idPedido: number): void {
-        const pedido = this.pedidosTotales.get(idPedido);
-        if (!pedido) {
-            throw new Error(`Pedido ID ${idPedido} no encontrado.`);
-        }
-        if (pedido.getEstado() !== EstadoPedido.FACTURADO) {
-            throw new Error(`El pedido ID ${idPedido} no se puede registrar como finalizado porque aún no fue facturado.`);
-        }
-        this.pedidosFinalizados.set(idPedido, pedido);
+    public registrarPedidoFinalizado(factura: Factura): void {
+        const idFactura: number = this.getCantidadPedidosFinalizados();
+        factura.setIdFactura(idFactura);
+        this.pedidosFinalizados.set(idFactura, factura);
+    }
+
+    private getCantidadPedidosFinalizados(): number {
+        return this.pedidosFinalizados.size
     }
 
     public consultarHistorial(): void {
         if (this.pedidosFinalizados.size === ZERO) {
             throw new Error("El historial de pedidos finalizados está vacío.");
         }
-        this.pedidosFinalizados.forEach((pedido, id) => {
-            console.log(`Pedido ID: ${id} Estado: ${pedido.getEstado()} Total Cobrado: $${pedido.getPrecioFinal()}`);
+        this.pedidosFinalizados.forEach((factura, id) => {
+            console.log(factura.getInfoPedido());
         });
     }
 
-    public getPedidosFinalizados(): Map<number, Pedido> {
+    public getPedidosFinalizados(): Map<number, Factura> {
         return this.pedidosFinalizados;
     }
 }
