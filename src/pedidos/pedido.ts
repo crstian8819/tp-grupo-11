@@ -1,10 +1,8 @@
-//import {ItemIndividual} from "../itemIndividual";
 import {EstadoItem} from "../estadoItem";
 import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
 import { ZERO } from "../Constantes/constantes";
 import { ItemPedido } from "../itemPedido";
-//import { ItemPedido } from "../itemPedido";
 export abstract class Pedido {
     private items: List<ItemPedido>;
     private estado: EstadoPedido;
@@ -94,16 +92,6 @@ export abstract class Pedido {
     public getItems(): List<ItemPedido> {
         return this.items;
     }
-    
-    public setPrecioFinal(): void {
-        this.precioFinal = ZERO;
-        let headAux = this.items.getHead();
-        while (headAux) {
-            this.precioFinal += headAux.getValue().getProducto().getPrecio();
-            headAux = headAux.getNext();
-        }
-
-    }
 
     public listItems(): void {
         let headAux = this.items.getHead();
@@ -115,7 +103,7 @@ export abstract class Pedido {
     }
     
     public getPrecioFinal() : number {
-        return this.precioFinal;
+        return this.calcularPrecioFinal();
     }
 
     
@@ -124,7 +112,7 @@ export abstract class Pedido {
         return this.estado === EstadoPedido.CONFIRMADO;
     }
 
-    // RF7: Impide facturar hasta que el pedido esté CONFIRMADO y todos los ítems estén "LISTO"
+    //Impide facturar hasta que el pedido este CONFIRMADO y todos los items esten LISTO
     public listoParaFacturar(): boolean {
         let resultado = true
         if (this.estado !== EstadoPedido.CONFIRMADO) {
@@ -144,4 +132,3 @@ export abstract class Pedido {
     }
 
 }
-
