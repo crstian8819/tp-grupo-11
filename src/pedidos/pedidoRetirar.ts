@@ -1,5 +1,4 @@
 import {Pedido} from "./pedido"
-import { ZERO } from "../Constantes/constantes";
 
 export class PedidoRetirar extends Pedido {
     private horario : number;
@@ -17,7 +16,4 @@ export class PedidoRetirar extends Pedido {
         this.horario = horario;
     }
 
-    public getCargosAdicionales(): number {
-        return ZERO;
-    }
 }

@@ -64,6 +64,10 @@ export class GestorPedidos {
     }
 
     public distribuirItemsACocina(pedido: Pedido, distribuidor: DistribuirItem): void {
+        if (this.pedidosTotales.get(pedido.getID()) !== pedido) {
+            throw new Error("El pedido no está registrado en este gestor.");
+        }
+        
         const lineas: ItemPedido[] = [];
         let node = pedido.getItems().getHead();
 
