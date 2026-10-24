@@ -1,10 +1,12 @@
+import { ZERO } from "../Constantes/constantes"
+
 export class DescuentoDia {
     private diaDeLaSemana: string;
     private porcentajeDescuento: number;
 
     public constructor(diaDeLaSemana?: string, porcentajeDescuento?: number) {
         this.diaDeLaSemana = diaDeLaSemana ?? '';
-        this.porcentajeDescuento = porcentajeDescuento ?? 0;
+        this.porcentajeDescuento = porcentajeDescuento ?? ZERO;
     }
 
     public setDiaDeLaSemana(diaDeLaSemana:string):void {
