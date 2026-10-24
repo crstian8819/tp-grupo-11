@@ -7,6 +7,7 @@ export abstract class Pedido {
     private items: List<ItemPedido>;
     private estado: EstadoPedido;
     private precioFinal: number;
+    private cargoAdicional: number;
     private identificador : number;
     private historialModificaciones: ItemPedido[]; // Pila para deshacer ultima modificacion
 
@@ -14,6 +15,7 @@ export abstract class Pedido {
         this.identificador = undefined as unknown as number;
         this.items = new List<ItemPedido>();
         this.precioFinal = ZERO;
+        this.cargoAdicional = ZERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
         this.historialModificaciones = [];
     }
@@ -69,7 +71,7 @@ export abstract class Pedido {
 
     // Metodo para sumar cargos adicionales según modalidad (ej. costoEnvio)
     public getCargosAdicionales(): number {
-        return ZERO;
+        return this.cargoAdicional;
     }
 
     
