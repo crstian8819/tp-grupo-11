@@ -77,7 +77,7 @@ export class List<T> {
         return node;
     }
 
-    insertUnique(value: T): MyNode<T> {
+    public insertUnique(value: T): MyNode<T> {
         const node = this.search(value);
         if (!node) {
         this.insertOrdered(value);
