@@ -1,6 +1,6 @@
 import { EstadoItem } from "../estadoItem";
 import { EstadoPreparacion } from "./estadoPreparacion";
-import { ItemPedido } from "../itemPedido";
+
 
 export class Listo implements EstadoPreparacion {
     public getNombre(): EstadoItem {
@@ -9,7 +9,7 @@ export class Listo implements EstadoPreparacion {
     public puedeModificarse(): boolean {
         return false;
     }
-    public avanzar(item: ItemPedido): void {
+    public avanzar(): void {
         throw new Error ("El item ya esta Listo");
     }
 }

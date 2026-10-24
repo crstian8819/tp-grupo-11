@@ -8,7 +8,7 @@ import { EstadoPedido } from "../estadoPedido"
 import { ErrorDeFacturacion } from "../Errores/errorDeFacturacion";
 //import { TEN_PERCENT } from "../Constantes/constantes";
 import { ZERO } from "../Constantes/constantes";
-import { ONE_ } from "../Constantes/constantes";
+import { UNIDAD } from "../Constantes/constantes";
 import { GestorPedidos } from "../pedidos/gestorPedidos";
 
 export class GestorPagos implements DescuentoBeneficioso {
@@ -66,7 +66,7 @@ export class GestorPagos implements DescuentoBeneficioso {
 
     //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES
     public calcularDescuento(): number {
-        let mayorBeneficio:number = ONE_;
+        let mayorBeneficio:number = UNIDAD;
 
         if (this.medioPago?.getTipoDePago() === TipoMedioPago.EFECTIVO) {
             mayorBeneficio = Math.min(mayorBeneficio, this.descuentoEnEfectivo);
