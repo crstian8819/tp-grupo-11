@@ -6,7 +6,7 @@ export class Combo extends Item {
     private productos: ItemIndividual[];
     private beneficio: Beneficio;
 
-    constructor(nombre:string,productos: ItemIndividual[], beneficio: Beneficio) {
+    public constructor(nombre:string,productos: ItemIndividual[], beneficio: Beneficio) {
         super(nombre);
         if (productos.length < 2) {
             throw new Error("Un combo debe tener al menos 2 productos");

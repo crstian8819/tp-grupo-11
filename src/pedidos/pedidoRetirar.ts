@@ -3,7 +3,7 @@ import {Pedido} from "./pedido"
 export class PedidoRetirar extends Pedido {
     private horario : number;
 
-    constructor(horario:number) {
+    public constructor(horario:number) {
         super()
         this.horario = horario;
     }

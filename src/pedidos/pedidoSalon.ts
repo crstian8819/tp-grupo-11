@@ -3,7 +3,7 @@ import {Pedido} from "./pedido"
 export class PedidoSalon extends Pedido {
     private numeroMesa : number;
 
-    constructor(nMesa : number) {
+    public constructor(nMesa : number) {
         super()
         this.numeroMesa = nMesa;
     }

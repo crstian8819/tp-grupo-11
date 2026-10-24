@@ -7,7 +7,7 @@ export abstract class Item implements Producto {
     protected nombre:string;
     protected precio:number;
 
-    constructor(nombre?:string, precio?:number) {
+    public constructor(nombre?:string, precio?:number) {
         this.nombre=nombre ?? UNNAMED;
         this.precio=precio ?? ZERO; 
     }

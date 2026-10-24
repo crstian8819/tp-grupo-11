@@ -2,7 +2,7 @@ export class MyNode<T> {
     private value : T;
     private next : MyNode<T>;
 
-    constructor(value : T) {
+    public constructor(value : T) {
         this.value = value;
         this.next = undefined as unknown as MyNode<T>;
     }

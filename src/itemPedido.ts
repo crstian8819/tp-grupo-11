@@ -8,7 +8,7 @@ export class ItemPedido {
         private estado: EstadoPreparacion;
         private preparaciones:ItemPedido[]=[];
 
-        constructor(item:Producto,cantidad:number) {
+        public constructor(item:Producto,cantidad:number) {
             if (!Number.isInteger(cantidad)|| cantidad <1) {
                 throw new Error("La cantidad debe ser un entero mayor o igual a 1");
             }

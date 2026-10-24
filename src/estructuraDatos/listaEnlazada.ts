@@ -3,7 +3,7 @@ import {MyNode} from "./node";
 export class List<T> {
     
     private head: MyNode<T>;
-    constructor() {
+    public constructor() {
         this.head = undefined as unknown as MyNode<T>;
     }
 

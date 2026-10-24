@@ -5,7 +5,7 @@ export abstract class MedioPago {
     protected saldoDisponible: number;
     protected tipoMedioPago: TipoMedioPago;
     
-    constructor(tipoPago:TipoMedioPago) {
+    public constructor(tipoPago:TipoMedioPago) {
         this.saldoDisponible = ZERO;
         this.tipoMedioPago = tipoPago;
     }

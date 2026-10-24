@@ -5,7 +5,7 @@ import { Cocina } from "./cocina";
 export class DistribuirItem {
     private primeraCocina: Cocina;
 
-    constructor(primeraCocina: Cocina) {
+    public constructor(primeraCocina: Cocina) {
         this.primeraCocina = primeraCocina;
     }
 

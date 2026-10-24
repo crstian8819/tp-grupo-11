@@ -4,7 +4,7 @@ import { ZERO } from "../Constantes/constantes";
 export class PedidoEnvio extends Pedido {
     private direccion : string;
     private costoEnvio : number;
-    constructor(direccion : string) {
+    public constructor(direccion : string) {
         super()
         this.direccion = direccion;
         this.costoEnvio = ZERO;

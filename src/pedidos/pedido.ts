@@ -10,7 +10,7 @@ export abstract class Pedido {
     private id : number;
     private historialModificaciones: ItemPedido[]; // Pila para deshacer ultima modificacion
 
-    constructor() {
+    public constructor() {
         this.id = undefined as unknown as number;
         this.items = new List<ItemPedido>();
         this.precioFinal = ZERO;

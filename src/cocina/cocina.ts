@@ -8,7 +8,7 @@ export abstract class Cocina {
     protected tipo:TipoEstacion;
     private siguiente?: Cocina;
 
-    constructor(nombre:string,tipo:TipoEstacion) {
+    public constructor(nombre:string,tipo:TipoEstacion) {
         this.nombre=nombre;
         this.items=[];
         this.tipo=tipo;
