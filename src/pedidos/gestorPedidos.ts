@@ -4,6 +4,10 @@ import { PedidoRetirar } from "./pedidoRetirar";
 import { PedidoSalon } from "./pedidoSalon";
 import { ZERO } from "../Constantes/constantes";
 import { Factura } from "../GestorPagos/factura";
+import { EstadoPedido } from "../estadoPedido";
+import { DistribuirItem } from "../cocina/distribuirItem";
+import { ItemPedido } from "../itemPedido";
+
 export class GestorPedidos {
     private pedidosTotales: Map<number, Pedido>;
     private cantidadPedidos : number = ZERO;
@@ -44,12 +48,31 @@ export class GestorPedidos {
     }
 
     //Confirmar pedido y distribuir sus items a las cocinas
-    public confirmarPedido() :void {
-        //falta implementacion
+    public confirmarPedido(pedido: Pedido, distribuidor: DistribuirItem): void {
+        if (pedido.getEstado() !== EstadoPedido.EN_CONSTRUCCION) {
+            throw new Error("Solo se pueden confirmar pedidos en construcción.");
+        }
+
+        const primerItem = pedido.getItems().getHead();
+
+        if (!primerItem) {
+            throw new Error("No se puede confirmar un pedido vacío.");
+        }
+
+        this.distribuirItemsACocina(pedido, distribuidor);
+        pedido.setEstado(EstadoPedido.CONFIRMADO);
     }
 
-    public distribuirItemsACocina() : void {
-        //falta implementacion
+    public distribuirItemsACocina(pedido: Pedido, distribuidor: DistribuirItem): void {
+        const lineas: ItemPedido[] = [];
+        let node = pedido.getItems().getHead();
+
+        while (node) {
+            lineas.push(node.getValue());
+            node = node.getNext();
+        }
+
+        distribuidor.distribuir(lineas);
     }
 
     public registrarPedidoFinalizado(factura: Factura): void {
