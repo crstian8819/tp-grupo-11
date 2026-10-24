@@ -1,4 +1,5 @@
 import {Pedido} from "./pedido"
+import {ZERO} from "../Constantes/constantes"
 
 export class PedidoSalon extends Pedido {
     private numeroMesa : number;
@@ -14,5 +15,9 @@ export class PedidoSalon extends Pedido {
 
     public setNumeroMesa(nMesa: number): void {
         this.numeroMesa = nMesa;
+    }
+
+    public getCargosAdicionales(): number {
+        return ZERO;
     }
 }

@@ -34,19 +34,34 @@ export class ItemPedido {
         public agregarPreparacion(preparacion:ItemPedido):void {
             this.preparaciones.push(preparacion);
         }
+
         public setEstado(estado: EstadoPreparacion): void {
+
         this.estado = estado;
+
         }
 
         public getEstado():EstadoItem {
-            if (this.preparaciones.length === ZERO) {return this.estado.getNombre();}
-            if (this.preparaciones.every(preparacion => preparacion.getEstado() === EstadoItem.LISTO)) {return EstadoItem.LISTO;}
-            if (this.preparaciones.every(preparacion => preparacion.getEstado() === EstadoItem.PENDIENTE)) {return EstadoItem.PENDIENTE;}
+            if (this.preparaciones.length === ZERO) {
+                return this.estado.getNombre();
+            }
+
+            if (this.preparaciones.every(preparacion => preparacion.getEstado() === EstadoItem.LISTO)) {
+                return EstadoItem.LISTO;
+            }
+
+            if (this.preparaciones.every(preparacion => preparacion.getEstado() === EstadoItem.PENDIENTE)) {
+
+                return EstadoItem.PENDIENTE;
+
+            }
         return EstadoItem.EN_PREPARACION;
         }
 
         public puedeModificarse():boolean {
-            if (this.preparaciones.length === ZERO) {return this.estado.puedeModificarse()};
+            if (this.preparaciones.length === ZERO) {
+                return this.estado.puedeModificarse();
+            }
             return this.getEstado() === EstadoItem.PENDIENTE;
         }
 

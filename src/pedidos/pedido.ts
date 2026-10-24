@@ -68,9 +68,7 @@ export abstract class Pedido {
     }
 
     // Metodo para sumar cargos adicionales según modalidad (ej. costoEnvio)
-    public getCargosAdicionales(): number {
-        return ZERO;
-    }
+    public abstract getCargosAdicionales(): number;
 
     
     public setEstado(estado: EstadoPedido) : void {

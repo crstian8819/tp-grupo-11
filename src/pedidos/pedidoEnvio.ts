@@ -23,4 +23,8 @@ export class PedidoEnvio extends Pedido {
         this.calcularPrecioFinal();
     }
 
+    public getCargosAdicionales(): number {
+        return this.costoEnvio;
+    }
+
 }

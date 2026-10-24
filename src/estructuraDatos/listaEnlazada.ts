@@ -25,7 +25,7 @@ export class List<T> {
         return node;
     }
 
-    public pop(): T {
+    public eliminarUltimo(): T {
         let value = undefined;
         let headAux = this.head;
         let previous:MyNode<T> = undefined as unknown as MyNode<T>;
