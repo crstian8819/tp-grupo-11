@@ -25,8 +25,7 @@ export class List<T> {
         return node;
     }
 
-    public eliminarUltimo(): T {
-        let value = undefined;
+    public removeLast(): T {
         let headAux = this.head;
         let previous:MyNode<T> = undefined as unknown as MyNode<T>;
         while (headAux && headAux.getNext()) {
@@ -39,8 +38,7 @@ export class List<T> {
         else {
         previous.setNext(undefined as unknown as MyNode<T>);
         }
-        value = headAux.getValue();
-        return value;
+        return headAux.getValue();
     }
 
     public insertFirst(value: T): MyNode<T> {
