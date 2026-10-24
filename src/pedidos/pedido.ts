@@ -1,8 +1,10 @@
 import {EstadoItem} from "../estadoItem";
 import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
-import { ZERO } from "../Constantes/constantes";
+import { CERO } from "../Constantes/constantes";
 import { ItemPedido } from "../itemPedido";
+import { ErrorEnPedido } from "../Errores/errorEnPedido";
+
 export abstract class Pedido {
     private items: List<ItemPedido>;
     private estado: EstadoPedido;
@@ -14,8 +16,8 @@ export abstract class Pedido {
     public constructor() {
         this.identificador = undefined as unknown as number;
         this.items = new List<ItemPedido>();
-        this.precioFinal = ZERO;
-        this.cargoAdicional = ZERO;
+        this.precioFinal = CERO;
+        this.cargoAdicional = CERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
         this.historialModificaciones = [];
     }
@@ -26,7 +28,7 @@ export abstract class Pedido {
 
     public agregarItem(item: ItemPedido): void {
         if (!this.puedeModificarse()) {
-            throw new Error("No se pueden agregar ítems a un pedido confirmado o facturado.");
+            throw new ErrorEnPedido("No se pueden agregar ítems a un pedido confirmado o facturado.");
         }
         this.items.push(item);
         this.historialModificaciones.push(item);
@@ -35,10 +37,10 @@ export abstract class Pedido {
 
     public eliminarItem(item: ItemPedido): void {
         if (!this.puedeModificarse()) {
-            throw new Error("No se pueden eliminar items de un pedido que no este en construcción.");
+            throw new ErrorEnPedido("No se pueden eliminar items de un pedido que no este en construcción.");
         }
         if (!item.puedeModificarse()) {
-            throw new Error("No se puede eliminar un item en preparacion.");
+            throw new ErrorEnPedido("No se puede eliminar un item en preparacion.");
         }
 
         this.items.delete(item);
@@ -48,7 +50,7 @@ export abstract class Pedido {
     //metodo para deshacer ultima modificacion
     public deshacerUltimaModificacion(): void {
         if (!this.puedeModificarse()) {
-            throw new Error("No se pueden deshacer cambios en un pedido ya confirmado.");
+            throw new ErrorEnPedido("No se pueden deshacer cambios en un pedido ya confirmado.");
         }
         const ultimoItem = this.historialModificaciones.pop();
         if (ultimoItem) {
@@ -58,7 +60,7 @@ export abstract class Pedido {
     }
 
     public calcularPrecioFinal(): number {
-        let total = ZERO;
+        let total = CERO;
         let headAux = this.items.getHead();
         while (headAux) {
             total += headAux.getValue().getTotal();

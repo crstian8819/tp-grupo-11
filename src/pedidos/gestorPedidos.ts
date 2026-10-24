@@ -2,15 +2,18 @@ import { Pedido } from "./pedido";
 import { PedidoEnvio } from "./pedidoEnvio";
 import { PedidoRetirar } from "./pedidoRetirar";
 import { PedidoSalon } from "./pedidoSalon";
-import { ZERO } from "../Constantes/constantes";
+import { CERO } from "../Constantes/constantes";
 import { Factura } from "../GestorPagos/factura";
 import { EstadoPedido } from "../estadoPedido";
 import { DistribuirItem } from "../cocina/distribuirItem";
 import { ItemPedido } from "../itemPedido";
+import { ErrorEnConfirmacion } from "../Errores/errorEnConfirmacion";
+import { ErrorEnDistribucion } from "../Errores/errorEnDistribucion";
+import { ErrorEnHistorial } from "../Errores/errorEnHistorial";
 
 export class GestorPedidos {
     private pedidosTotales: Map<number, Pedido>;
-    private cantidadPedidos : number = ZERO;
+    private cantidadPedidos : number = CERO;
     private pedidosFinalizados: Map<number, Factura>;
 
     public constructor() {
@@ -56,7 +59,7 @@ export class GestorPedidos {
         const primerItem = pedido.getItems().getHead();
 
         if (!primerItem) {
-            throw new Error("No se puede confirmar un pedido vacío.");
+            throw new ErrorEnConfirmacion("No se puede confirmar un pedido vacío.");
         }
 
         this.distribuirItemsACocina(pedido, distribuidor);
@@ -65,7 +68,7 @@ export class GestorPedidos {
 
     public distribuirItemsACocina(pedido: Pedido, distribuidor: DistribuirItem): void {
         if (this.pedidosTotales.get(pedido.getID()) !== pedido) {
-            throw new Error("El pedido no está registrado en este gestor.");
+            throw new ErrorEnDistribucion("El pedido no está registrado en este gestor.");
         }
         
         const lineas: ItemPedido[] = [];
@@ -90,8 +93,8 @@ export class GestorPedidos {
     }
 
     public consultarHistorial(): void {
-        if (this.pedidosFinalizados.size === ZERO) {
-            throw new Error("El historial de pedidos finalizados está vacío.");
+        if (this.pedidosFinalizados.size === CERO) {
+            throw new ErrorEnHistorial("El historial de pedidos finalizados está vacío.");
         }
         this.pedidosFinalizados.forEach((factura) => {
             console.log(factura.getInfoPedido());

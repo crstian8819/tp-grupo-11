@@ -5,9 +5,7 @@ import { Factura } from "./factura";
 import { Pedido } from "../pedidos/pedido"; 
 import { DescuentoBeneficioso } from "./descuento";
 import { EstadoPedido } from "../estadoPedido"
-import { ErrorDeFacturacion } from "../Errores/errorDeFacturacion";
-//import { TEN_PERCENT } from "../Constantes/constantes";
-import { ZERO } from "../Constantes/constantes";
+import { ErrorEnFacturacion } from "../Errores/errorEnFacturacion";
 import { UNIDAD } from "../Constantes/constantes";
 import { GestorPedidos } from "../pedidos/gestorPedidos";
 
@@ -19,7 +17,7 @@ export class GestorPagos implements DescuentoBeneficioso {
     public constructor(gestorPedidos:GestorPedidos) {
         this.medioPago = undefined;
         this.descuentoDelDia = undefined;
-        this.descuentoEnEfectivo = ZERO;
+        this.descuentoEnEfectivo = UNIDAD;
         this.gestorPedidos = gestorPedidos;
     }
 
@@ -53,13 +51,13 @@ export class GestorPagos implements DescuentoBeneficioso {
                     this.gestorPedidos.registrarPedidoFinalizado(factura);
                     return factura
                 } else {
-                    throw new ErrorDeFacturacion("Saldo insuficiente.");
+                    throw new ErrorEnFacturacion("Saldo insuficiente.");
                 }
             } else {
-                throw new ErrorDeFacturacion("No hay medio de pago.")
+                throw new ErrorEnFacturacion("No hay medio de pago.");
             }
         } else {
-            throw new ErrorDeFacturacion("El pedido no se encuentra LISTO.");
+            throw new ErrorEnFacturacion("El pedido no se encuentra CONFIRMADO.");
         }
             
     }

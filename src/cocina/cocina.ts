@@ -1,6 +1,7 @@
 import { EstadoItem } from "../estadoItem";
 import { ItemPedido } from "../itemPedido";
 import { TipoEstacion } from "./tipoEstacion";
+import { ErrorEnCocina } from "../Errores/errorEnCocina";
 
 export abstract class Cocina {
     protected nombre:string;
@@ -32,7 +33,7 @@ export abstract class Cocina {
             return this;
         }
         if (!this.siguiente) {
-            throw new Error(`No hay una cocina disponible para la estación ${estacion}`);
+            throw new ErrorEnCocina(`No hay una cocina disponible para la estación ${estacion}`);
 
         }
         return this.siguiente.buscarCocina(estacion);
@@ -49,7 +50,7 @@ export abstract class Cocina {
     public procesarSiguiente():void {
         const siguiente=this.items.find(item => item.getEstado() !== EstadoItem.LISTO)
             if (!siguiente) {
-               throw new Error(`No hay ítems para procesar en ${this.nombre}`) 
+               throw new ErrorEnCocina(`No hay ítems para procesar en ${this.nombre}`) 
             }
             siguiente.avanzarEstado();
     }

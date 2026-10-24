@@ -1,7 +1,7 @@
-export class ErrorDeFacturacion extends Error {
+export class ErrorEnItemPedido extends Error {
     public constructor(mensaje:string) {
         super(mensaje);
-        this.name = "ErrorDePago";
+        this.name = "ErrorEnItemPedido";
     }
 
     public getMensaje(): string {

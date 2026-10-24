@@ -2,6 +2,7 @@ import { ItemIndividual } from "./itemIndividual"
 import { List } from "./estructuraDatos/listaEnlazada"
 import { Combo } from "./combo";
 import { Categoria } from "./categoria";
+import { ErrorEnMenu} from "./Errores/errorEnMenu";
 
 export class Menu {
     private entradas: List<ItemIndividual>;
@@ -44,7 +45,7 @@ export class Menu {
     public getItemPorCategoria(categoria: Categoria): List<ItemIndividual> {
         const lista = this.listaPorCategoria.get(categoria);
         if (!lista) {
-            throw new Error(`Categoria no encontrada: ${categoria}`);
+            throw new ErrorEnMenu(`Categoria no encontrada: ${categoria}`);
         }
         
         return lista;

@@ -1,7 +1,8 @@
 import { ItemIndividual } from "./itemIndividual";
 import { Beneficio } from "./beneficio";
 import { Item } from "./item";
-import { ZERO, NUM_DOS } from "./Constantes/constantes"
+import { CERO, NUM_DOS } from "./Constantes/constantes"
+import { ErrorEnCombo } from "./Errores/errorEnCombo";
 
 export class Combo extends Item {
     private productos: ItemIndividual[];
@@ -10,7 +11,7 @@ export class Combo extends Item {
     public constructor(nombre:string,productos: ItemIndividual[], beneficio: Beneficio) {
         super(nombre);
         if (productos.length < NUM_DOS) {
-            throw new Error("Un combo debe tener al menos 2 productos");
+            throw new ErrorEnCombo("Un combo debe tener al menos 2 productos");
         }
         this.productos = [... productos];
         this.beneficio = beneficio;
@@ -19,7 +20,7 @@ export class Combo extends Item {
     public getPrecio(): number {
         const suma = this.productos.reduce(
             (total, item) => total + item.getPrecio(),
-            ZERO
+            CERO
         );
         return this.beneficio.calcularBeneficio(suma);
     }

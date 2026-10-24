@@ -2,7 +2,9 @@ import { EstadoItem } from "./estadoItem";
 import { Producto } from "./producto";
 import { EstadoPreparacion } from "./cocina/estadoPreparacion";
 import { Pendiente } from "./cocina/pendiente";
-import { ZERO, UNIDAD } from "./Constantes/constantes"
+import { CERO, UNIDAD } from "./Constantes/constantes"
+import { ErrorEnItemPedido } from "./Errores/errorEnItemPedido";
+
 export class ItemPedido {
         private item: Producto;
         private cantidad: number;
@@ -11,7 +13,7 @@ export class ItemPedido {
 
         public constructor(item:Producto,cantidad:number) {
             if (!Number.isInteger(cantidad)|| cantidad < UNIDAD) {
-                throw new Error("La cantidad debe ser un entero mayor o igual a 1");
+                throw new ErrorEnItemPedido("La cantidad debe ser un entero mayor o igual a 1");
             }
             this.item=item;
             this.cantidad=cantidad;
@@ -42,7 +44,7 @@ export class ItemPedido {
         }
 
         public getEstado():EstadoItem {
-            if (this.preparaciones.length === ZERO) {
+            if (this.preparaciones.length === CERO) {
                 return this.estado.getNombre();
             }
 
@@ -59,15 +61,15 @@ export class ItemPedido {
         }
 
         public puedeModificarse():boolean {
-            if (this.preparaciones.length === ZERO) {
+            if (this.preparaciones.length === CERO) {
                 return this.estado.puedeModificarse();
             }
             return this.getEstado() === EstadoItem.PENDIENTE;
         }
 
         public avanzarEstado():void {
-            if (this.preparaciones.length> ZERO) {
-                throw new Error ("Esta linea avanza segun las preparaciones en La cocina");
+            if (this.preparaciones.length> CERO) {
+                throw new ErrorEnItemPedido("Esta linea avanza segun las preparaciones en La cocina");
             }
             this.estado.avanzar(this);
         }

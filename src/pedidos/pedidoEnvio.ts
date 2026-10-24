@@ -1,5 +1,5 @@
 import {Pedido} from "./pedido"
-import { ZERO } from "../Constantes/constantes";
+import { CERO } from "../Constantes/constantes";
 
 export class PedidoEnvio extends Pedido {
     private direccion : string;
@@ -7,7 +7,7 @@ export class PedidoEnvio extends Pedido {
     public constructor(direccion : string) {
         super()
         this.direccion = direccion;
-        this.costoEnvio = ZERO;
+        this.costoEnvio = CERO;
     }
 
     public getDireccion() : string {

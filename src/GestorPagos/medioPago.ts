@@ -1,4 +1,4 @@
-import { ZERO } from "../Constantes/constantes";
+import { CERO } from "../Constantes/constantes";
 import { TipoMedioPago } from "./tipoMedioPago";
 
 export abstract class MedioPago {
@@ -6,7 +6,7 @@ export abstract class MedioPago {
     protected tipoMedioPago: TipoMedioPago;
     
     public constructor(tipoPago:TipoMedioPago) {
-        this.saldoDisponible = ZERO;
+        this.saldoDisponible = CERO;
         this.tipoMedioPago = tipoPago;
     }
 
@@ -23,6 +23,6 @@ export abstract class MedioPago {
     }
 
     public pagar(monto:number): boolean {
-        return (this.saldoDisponible - monto) >= ZERO
+        return (this.saldoDisponible - monto) >= CERO
     }
 }

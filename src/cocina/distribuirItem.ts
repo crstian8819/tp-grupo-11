@@ -1,6 +1,6 @@
 import { ItemPedido } from "../itemPedido";
 import { Cocina } from "./cocina";
-import { ZERO, UNIDAD } from "../Constantes/constantes"
+import { CERO, UNIDAD } from "../Constantes/constantes"
 
 
 export class DistribuirItem {
@@ -15,7 +15,7 @@ export class DistribuirItem {
         const envios: { cocina: Cocina; item: ItemPedido,linea:ItemPedido }[] = [];
 
         for (const linea of lineas) {
-            for (let i = ZERO; i < linea.getCantidad(); i++) {
+            for (let i = CERO; i < linea.getCantidad(); i++) {
                 for (const componente of linea.getProducto().getComponentes()) {
                     const estacion = componente.getTipoEstacion();
                     const cocina = this.primeraCocina.buscarCocina(estacion);

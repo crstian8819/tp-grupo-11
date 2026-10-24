@@ -1,5 +1,4 @@
-export const TEN_PERCENT:number=0.9; //precioFinalPedido * 0.9 === precioFinalPedido - 10%
-export const ZERO:number=0;
+export const CERO:number=0;
 export const UNIDAD:number=1;
-export const UNNAMED:string="";
+export const SIN_NOMBRE:string="";
 export const NUM_DOS:number=2;

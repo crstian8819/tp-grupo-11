@@ -1,4 +1,4 @@
-import { ZERO } from "../Constantes/constantes"
+import { CERO } from "../Constantes/constantes"
 
 export class DescuentoDia {
     private diaDeLaSemana: string;
@@ -6,7 +6,7 @@ export class DescuentoDia {
 
     public constructor(diaDeLaSemana?: string, porcentajeDescuento?: number) {
         this.diaDeLaSemana = diaDeLaSemana ?? '';
-        this.porcentajeDescuento = porcentajeDescuento ?? ZERO;
+        this.porcentajeDescuento = porcentajeDescuento ?? CERO;
     }
 
     public setDiaDeLaSemana(diaDeLaSemana:string):void {

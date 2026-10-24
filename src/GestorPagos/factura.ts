@@ -1,12 +1,12 @@
 import { Pedido } from "../pedidos/pedido";
-import { ZERO } from "../Constantes/constantes";
+import { CERO } from "../Constantes/constantes";
 export class Factura {
     private idFactura: number;
     private pedido: Pedido;
     private montoFinal: number;
 
     public constructor(pedido: Pedido, montoFinal:number) {
-        this.idFactura=ZERO;
+        this.idFactura=CERO;
         this.pedido=pedido;
         this.montoFinal=montoFinal;
     }
