@@ -39,8 +39,8 @@ export class GestorPedidos {
         this.cantidadPedidos++;
     }
 
-    public getPedidoPorId(id: number): Pedido | undefined {
-        return this.pedidosTotales.get(id);
+    public getPedidoPorId(identificador: number): Pedido | undefined {
+        return this.pedidosTotales.get(identificador);
     }
 
     //Confirmar pedido y distribuir sus items a las cocinas
@@ -66,7 +66,7 @@ export class GestorPedidos {
         if (this.pedidosFinalizados.size === ZERO) {
             throw new Error("El historial de pedidos finalizados está vacío.");
         }
-        this.pedidosFinalizados.forEach((factura, id) => {
+        this.pedidosFinalizados.forEach((factura) => {
             console.log(factura.getInfoPedido());
         });
     }

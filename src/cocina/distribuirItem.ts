@@ -24,10 +24,10 @@ export class DistribuirItem {
             }
         }
 
-        envios.forEach(e => {
-            e.cocina.recibirItem(e.item);
-            e.linea.agregarPreparacion(e.item);
+        envios.forEach(envio => {
+            envio.cocina.recibirItem(envio.item);
+            envio.linea.agregarPreparacion(envio.item);
         });
-        return envios.map(e => e.item);
+        return envios.map(envio => envio.item);
     }
 }

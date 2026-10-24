@@ -7,11 +7,11 @@ export abstract class Pedido {
     private items: List<ItemPedido>;
     private estado: EstadoPedido;
     private precioFinal: number;
-    private id : number;
+    private identificador : number;
     private historialModificaciones: ItemPedido[]; // Pila para deshacer ultima modificacion
 
     public constructor() {
-        this.id = undefined as unknown as number;
+        this.identificador = undefined as unknown as number;
         this.items = new List<ItemPedido>();
         this.precioFinal = ZERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
@@ -73,20 +73,20 @@ export abstract class Pedido {
     }
 
     
-    public setEstado(ESTADO: EstadoPedido) : void {
-        this.estado = ESTADO
+    public setEstado(estado: EstadoPedido) : void {
+        this.estado = estado
     }
 
     public getEstado() : EstadoPedido {
         return this.estado;
     }
 
-    public setID(id : number) : void {
-        this.id = id;
+    public setID(identificador : number) : void {
+        this.identificador = identificador;
     }
 
     public getID() : number {
-        return this.id;
+        return this.identificador;
     }
 
     public getItems(): List<ItemPedido> {
