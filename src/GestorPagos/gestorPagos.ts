@@ -14,6 +14,7 @@ export class GestorPagos implements DescuentoBeneficioso {
     private descuentoDelDia: DescuentoDia | undefined;
     private descuentoEnEfectivo: number;
     private gestorPedidos: GestorPedidos;
+
     public constructor(gestorPedidos:GestorPedidos) {
         this.medioPago = undefined;
         this.descuentoDelDia = undefined;
@@ -42,38 +43,38 @@ export class GestorPagos implements DescuentoBeneficioso {
     }
 
     public cobrar(pedido: Pedido): Factura | undefined {
-        if (pedido.puedeFacturar()) {
+        if (pedido.listoParaFacturar()) {
             if (this.medioPago) {
-                const monto:number = pedido.getPrecioFinal()*this.calcularDescuento();
-                if (this.medioPago.pagar(monto)) {
+                const monto:number = pedido.getPrecioFinal()*this.calcularDescuento(pedido);
+                //if (this.medioPago.pagar(monto)) {
                     pedido.setEstado(EstadoPedido.FACTURADO);
                     const factura = new Factura(pedido, monto);
                     this.gestorPedidos.registrarPedidoFinalizado(factura);
                     return factura
-                } else {
-                    throw new ErrorEnFacturacion("Saldo insuficiente.");
-                }
+                //} else {
+                  //  throw new ErrorEnFacturacion("Saldo insuficiente.");
+                //}
             } else {
                 throw new ErrorEnFacturacion("No hay medio de pago.");
             }
         } else {
-            throw new ErrorEnFacturacion("El pedido no se encuentra CONFIRMADO.");
+            throw new ErrorEnFacturacion("El pedido no se encuentra LISTO PARA FACTURAR.");
         }
-            
     }
 
     //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES
-    public calcularDescuento(): number {
+    public calcularDescuento(pedido: Pedido): number {
         let mayorBeneficio:number = UNIDAD;
 
         if (this.medioPago?.getTipoDePago() === TipoMedioPago.EFECTIVO) {
             mayorBeneficio = Math.min(mayorBeneficio, this.descuentoEnEfectivo);
         }
         if (this.descuentoDelDia !== undefined) {
-            mayorBeneficio = Math.min(mayorBeneficio, this.descuentoDelDia.getPorcentajeDescuento());
+            const diaPedido = pedido.getFecha().getDay();
+            if (diaPedido === this.descuentoDelDia.getDiaDeLaSemana()) {
+                mayorBeneficio = Math.min(mayorBeneficio, this.descuentoDelDia.getPorcentajeDescuento());
+            }
         }
-
         return mayorBeneficio
     }
-
 }

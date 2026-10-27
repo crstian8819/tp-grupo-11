@@ -1,28 +1,24 @@
-import { CERO } from "../Constantes/constantes";
 import { TipoMedioPago } from "./tipoMedioPago";
+import { TipoTarjeta } from "./tipoTarjeta";
 
 export abstract class MedioPago {
-    protected saldoDisponible: number;
-    protected tipoMedioPago: TipoMedioPago;
+    private tipoMedioPago: TipoMedioPago;
+    private tipoTarjeta: TipoTarjeta | undefined;
     
-    public constructor(tipoPago:TipoMedioPago) {
-        this.saldoDisponible = CERO;
+    public constructor(tipoPago:TipoMedioPago, tipoTarjeta?:TipoTarjeta) {
         this.tipoMedioPago = tipoPago;
-    }
-
-    public getSaldo(): number {
-        return this.saldoDisponible
-    }
-
-    public setSaldo(saldo:number): void {
-        this.saldoDisponible = saldo;
+        this.tipoTarjeta = tipoTarjeta ?? undefined;
     }
 
     public getTipoDePago(): TipoMedioPago {
         return this.tipoMedioPago
     }
 
-    public pagar(monto:number): boolean {
-        return (this.saldoDisponible - monto) >= CERO
+    public getTipoDeTarjeta(): TipoTarjeta | undefined {
+        return this.tipoTarjeta
     }
+    
+    /*public pagar(monto:number): boolean {
+        return (this.saldoDisponible - monto) >= CERO
+    }*/
 }

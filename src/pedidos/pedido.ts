@@ -12,6 +12,7 @@ export abstract class Pedido {
     private cargoAdicional: number;
     private identificador : number;
     private historialModificaciones: ItemPedido[]; // Pila para deshacer ultima modificacion
+    private fecha: Date;
 
     public constructor() {
         this.identificador = undefined as unknown as number;
@@ -20,6 +21,11 @@ export abstract class Pedido {
         this.cargoAdicional = CERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
         this.historialModificaciones = [];
+        this.fecha = new Date();
+    }
+
+    public getFecha(): Date {
+        return this.fecha;
     }
 
     public puedeModificarse () : boolean {

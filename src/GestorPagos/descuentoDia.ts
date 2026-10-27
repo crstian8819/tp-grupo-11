@@ -1,19 +1,20 @@
-import { CERO } from "../Constantes/constantes"
+import { UNIDAD } from "../Constantes/constantes"
+import { DiaSemana } from "./diaSemana";
 
 export class DescuentoDia {
-    private diaDeLaSemana: string;
+    private diaDeLaSemana: DiaSemana;
     private porcentajeDescuento: number;
 
-    public constructor(diaDeLaSemana?: string, porcentajeDescuento?: number) {
-        this.diaDeLaSemana = diaDeLaSemana ?? '';
-        this.porcentajeDescuento = porcentajeDescuento ?? CERO;
+    public constructor(diaDeLaSemana: DiaSemana, porcentajeDescuento?: number) {
+        this.diaDeLaSemana = diaDeLaSemana;
+        this.porcentajeDescuento = porcentajeDescuento ?? UNIDAD;
     }
 
-    public setDiaDeLaSemana(diaDeLaSemana:string):void {
+    public setDiaDeLaSemana(diaDeLaSemana:DiaSemana):void {
         this.diaDeLaSemana=diaDeLaSemana;
     }
 
-    public getDiaDeLaSemana(): string {
+    public getDiaDeLaSemana(): DiaSemana {
         return this.diaDeLaSemana;
     }
 

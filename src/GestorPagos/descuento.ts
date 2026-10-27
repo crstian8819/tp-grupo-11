@@ -1,3 +1,5 @@
+import { Pedido } from "../pedidos/pedido";
+
 export interface DescuentoBeneficioso {
-    calcularDescuento(): number;
+    calcularDescuento(pedido: Pedido): number;
 }
