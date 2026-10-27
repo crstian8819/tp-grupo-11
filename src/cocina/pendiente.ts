@@ -3,6 +3,7 @@ import { EstadoItem } from "../estadoItem";
 import { EstadoPreparacion } from "./estadoPreparacion";
 import { ItemPedido } from "../itemPedido";
 
+/*eslint-disable @typescript-eslint/class-methods-use-this*/
 export class Pendiente implements EstadoPreparacion {
     public getNombre(): EstadoItem {
         return EstadoItem.PENDIENTE;

@@ -2,7 +2,7 @@ import { EstadoItem } from "../estadoItem";
 import { EstadoPreparacion } from "./estadoPreparacion";
 import { ItemPedido } from "../itemPedido";
 import { Listo } from "./listo";
-
+/*eslint-disable @typescript-eslint/class-methods-use-this*/
 export class EnPreparacion implements EstadoPreparacion {
     public getNombre(): EstadoItem {
         return EstadoItem.EN_PREPARACION;

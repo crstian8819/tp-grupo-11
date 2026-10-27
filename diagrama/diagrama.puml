@@ -33,6 +33,15 @@
         TARJETA
     }
 
+    enum DiaSemana {
+        DOMINGO
+        LUNES
+        MARTES
+        MIERCOLES
+        JUEVES
+        VIERNES
+        SABADO
+    }
     '-------------Restaurante-Sistema-----------------------
 
     class Restaurante {
@@ -124,8 +133,13 @@
     class Combo {
         -items: ItemIndividual[]
         
+        +aplicarBeneficio(): number
         +getPrecio(): number
         +getComponentes(): ItemIndividual[]
+    }
+
+    interface BeneficioCombo {
+        aplicarBeneficio(): number
     }
 
     note right of Combo::getComponentes()
@@ -176,24 +190,12 @@
     '------------------- MedioPago ------------------------
 
     abstract MedioPago {
-        #saldoDisponible: number
         #tipoMedioPago: TipoMedioPago
         +constructor(tipoPago:TipoMedioPago)
-        
-        +Pagar(monto:number): boolean
     }
-
-    class Efectivo {}
-
-    class Tarjeta{
-        -numero:string
-        -tipo:TipoTarjeta
-    }
-    
-    class BilleteraVirtual{}
 
     class DescuentoDia{
-        -dia:string
+        -dia: DiaSemana
         -porcentaje:number
     }
 
@@ -217,35 +219,31 @@
     '-------------------- RELACIONES ------------------------
 
 'RESTAURANTE
-
     Restaurante *-r- Menu
     Restaurante -[hidden]r- Menu
     Restaurante *-- Cocina
-    'Restaurante o-- Pedido
     Restaurante *-d- GestorPedidos
     Restaurante *--l--- GestorPagos
-    'Restaurante ..|> Descuento
 
 'PEDIDOS
-
     Pedido <|-d- PedidoSalon
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
     Pedido --* ItemPedido
+    Pedido -l-> EstadoPedido
 
 'MENU
-
     Menu *-- ItemIndividual
     Menu *-d- Combo
     Combo -l-> ItemIndividual
     Combo --|> Item
+    Combo ..|> BeneficioCombo
     ItemIndividual --|> Item
     Item .r.|> Producto
     ItemPedido -u-> Item
 
-
+    Menu -[hidden]u- Categoria
 'COCINA
-
     Parrilla -u-|> Cocina
     CocinaDulce -u-|> Cocina
     CocinaFria -u-|> Cocina
@@ -253,23 +251,18 @@
     ItemPedido <-- Cocina
 
 'GESTOR DE PAGOS
-
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
     GestorPagos -u-o Factura
     GestorPagos -u-o DescuentoBeneficioso
     GestorPagos --> GestorPedidos
+    DescuentoDia -l-> DiaSemana
 
+    MedioPago -[hidden]u- DescuentoBeneficioso
 'MEDIOS DE PAGO
-
-    Efectivo -u-|> MedioPago
-    Tarjeta -r-|> MedioPago
-    BilleteraVirtual -d-|> MedioPago
-
+    MedioPago -d-> TipoMedioPago
 
 'GESTOR DE PEDIDOS
-
-    'HistorialPedido o-- Pedido
     GestorPedidos o--> Pedido
 
 @enduml

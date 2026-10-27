@@ -3,3 +3,6 @@ node_modules/
 
 # Reportes de cobertura de tests
 coverage/
+
+# Archivos generados por la compilación de TypeScript
+dist/
