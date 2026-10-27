@@ -33,6 +33,11 @@
         TARJETA
     }
 
+    enum TipoTarjeta {
+        DEBITO
+        CREDITO
+    }
+
     enum DiaSemana {
         DOMINGO
         LUNES
@@ -220,8 +225,11 @@
     '------------------- MedioPago ------------------------
 
     abstract MedioPago {
-        #tipoMedioPago: TipoMedioPago
-        +constructor(tipoPago:TipoMedioPago)
+        -tipoMedioPago: TipoMedioPago
+        -tipoTarjeta: TipoTarjeta | undefined
+        +constructor(tipoPago:TipoMedioPago, tipoTarjeta?:TipoTarjeta)
+        +getTipoMedioPago(): TipoMedioPago
+        +getTipoTarjeta(): TipoTarjeta | undefined
     }
 
     class DescuentoDia{
@@ -293,6 +301,8 @@
     MedioPago -[hidden]u- DescuentoBeneficioso
 'MEDIOS DE PAGO
     MedioPago -d-> TipoMedioPago
+    MedioPago -d-> TipoTarjeta
+    
 
 'GESTOR DE PEDIDOS
     GestorPedidos o--> Pedido
