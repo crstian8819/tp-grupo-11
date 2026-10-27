@@ -55,9 +55,17 @@
 
     abstract class Pedido {
         ' -idPedido: number
-        -items: ItemPedido[]
+        '-items: ItemPedido[]
+        '-estado: EstadoPedido
+        '-precioFinal: number
+
+        -items: List<ItemPedido>
         -estado: EstadoPedido
         -precioFinal: number
+        -cargoAdicional: number
+        -identificador : number
+        -historialModificaciones: ItemPedido[]
+        -fecha: Date
 
         +puedeModificarse():boolean
         +agregarItem(item:ItemIndividual):void
@@ -83,6 +91,28 @@
         -costoEnvio: number
     }
 
+    class ListaEnlazada<T> {
+        -head: MyNode<T>
+        +getHead() : MyNode<T>
+        +push(value: T): MyNode<T>
+        +removeLast(): T
+        +insertFirst(value: T): MyNode<T>
+        +removeFirst(): T
+        +insertOrdered(value: T): MyNode<T>
+        +insertUnique(value: T): MyNode<T>
+        +delete(value: T): T
+        +search(value: T): MyNode<T>
+        +sort(): void
+        +clear(): void
+    }
+
+    class MyNode<T> {
+        -value : T;
+        -next : MyNode<T>;
+        +getValue() : T
+        +getNext() : MyNode<T>
+        +setNext(node : MyNode<T>) : void
+    }
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
@@ -230,7 +260,9 @@
     Pedido <|-d- PedidoRetirar
     Pedido <|-d- PedidoEnvio
     Pedido --* ItemPedido
-    Pedido -l-> EstadoPedido
+    Pedido -r-> EstadoPedido
+    Pedido *-l- ListaEnlazada
+    ListaEnlazada *-r- MyNode
 
 'MENU
     Menu *-- ItemIndividual
