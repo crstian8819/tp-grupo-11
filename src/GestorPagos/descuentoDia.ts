@@ -1,10 +1,18 @@
 import { UNIDAD } from "../Constantes/constantes"
 import { DiaSemana } from "./diaSemana";
 
+/**
+ * El descuento se aplica directamente en la multiplicación:
+ * Por default: 1 = 0%;
+ * 0.9 = 10%;
+ * 0.8 = 20%;
+ * 0.7 = 30%;
+ * ...
+*/
 export class DescuentoDia {
     private diaDeLaSemana: DiaSemana;
     private porcentajeDescuento: number;
-
+    
     public constructor(diaDeLaSemana: DiaSemana, porcentajeDescuento?: number) {
         this.diaDeLaSemana = diaDeLaSemana;
         this.porcentajeDescuento = porcentajeDescuento ?? UNIDAD;

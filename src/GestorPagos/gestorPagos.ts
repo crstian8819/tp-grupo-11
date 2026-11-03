@@ -26,6 +26,14 @@ export class GestorPagos implements DescuentoBeneficioso {
         this.medioPago=medioPago;
     }
 
+    /**
+     * @param {number} descuento - Se aplica directamente en la multiplicación:
+     * Por default: 1 = 0%; 
+     * 0.9 = 10%;
+     * 0.8 = 20%;
+     * 0.7 = 30%;
+     * ...
+     */
     public setDescuentoDelDia(descuento: DescuentoDia): void {
         this.descuentoDelDia = descuento;
     }
@@ -34,6 +42,14 @@ export class GestorPagos implements DescuentoBeneficioso {
         return this.descuentoDelDia
     }
 
+    /**
+     * @param {number} descuento - Se aplica directamente en la multiplicación:
+     * Por default: 1 = 0%; 
+     * 0.9 = 10%;
+     * 0.8 = 20%;
+     * 0.7 = 30%;
+     * ...
+     */
     public setDescuentoEnEfectivo(descuento: number): void {
         this.descuentoEnEfectivo = descuento;
     }
@@ -62,7 +78,6 @@ export class GestorPagos implements DescuentoBeneficioso {
         }
     }
 
-    //COMPARA ENTRE LOS DESCUENTOS DISPONIBLES
     public calcularDescuento(pedido: Pedido): number {
         let mayorBeneficio:number = UNIDAD;
 
