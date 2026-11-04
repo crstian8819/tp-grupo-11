@@ -174,7 +174,7 @@
     }
 
     interface BeneficioCombo {
-        aplicarBeneficio(): number
+        calcularBeneficio(): number
     }
 
     note right of Combo::getComponentes()
@@ -182,6 +182,25 @@
         return this.items
     
     end note
+
+    class PrecioFijo {
+        + constructor(private precio:number)
+        + calcularBeneficio(): number
+    }
+
+    note right of PrecioFijo::calcularBeneficio
+        return this.precio
+    end note
+
+    class DescuentoPorcentual {
+        + constructor(private descuento:number)
+        + calcularBeneficio(precioBase: number): number
+    }
+
+    note left of DescuentoPorcentual::calcularBeneficio
+       return precioBase * this.descuento 
+    end note
+
     '--------------------- COCINA ----------------------
 
     abstract class Cocina {
@@ -277,7 +296,10 @@
     Menu *-d- Combo
     Combo -l-> ItemIndividual
     Combo --|> Item
-    Combo ..|> BeneficioCombo
+    Combo --> BeneficioCombo
+    PrecioFijo .u.|> BeneficioCombo
+    DescuentoPorcentual .u.|> BeneficioCombo
+    DescuentoPorcentual -[hidden]r- PrecioFijo
     ItemIndividual --|> Item
     Item .r.|> Producto
     ItemPedido -u-> Item
