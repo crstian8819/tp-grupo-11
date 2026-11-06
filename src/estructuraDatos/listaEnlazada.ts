@@ -75,6 +75,7 @@ export class List<T> {
         return node;
     }
 
+    /* 
     public insertUnique(value: T): MyNode<T> {
         const node = this.search(value);
         if (!node) {
@@ -82,6 +83,7 @@ export class List<T> {
         }
         return node;
     }
+    */
 
     public delete(value: T): T {
         let headAux = this.head;
@@ -99,12 +101,12 @@ export class List<T> {
         return headAux.getValue();
     }
 
-    public search(value: T): MyNode<T> {
+    public search(value: T): boolean {
         let headAux = this.head;
         while (headAux && headAux.getValue() !== value) {
         headAux = headAux.getNext();
         }
-        return headAux;
+        return headAux !== null;
     }
 
     public sort(): void {

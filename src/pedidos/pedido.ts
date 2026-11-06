@@ -1,9 +1,14 @@
 import {EstadoItem} from "../estadoItem";
 import {EstadoPedido} from "../estadoPedido";
 import {List} from "../estructuraDatos/listaEnlazada";
-import { CERO } from "../Constantes/constantes";
+import { CERO, UNIDAD } from "../Constantes/constantes";
 import { ItemPedido } from "../itemPedido";
 import { ErrorEnPedido } from "../Errores/errorEnPedido";
+import { ModificacionPedido } from "./modificacionPedido";
+import { TipoModificacion } from "./tipoModificacion";
+import { ComandoModificacion } from "./comandoModificacion";
+import { ComandoAgregarItem } from "./comandoAgregarItem";
+import { ComandoEliminarItem } from "./comandoEliminarItem";
 
 export abstract class Pedido {
     private items: List<ItemPedido>;
@@ -11,7 +16,8 @@ export abstract class Pedido {
     private precioFinal: number;
     private cargoAdicional: number;
     private identificador : number;
-    private historialModificaciones: ItemPedido[]; // Pila para deshacer ultima modificacion
+    private historialModificaciones: ComandoModificacion[]; // Pila para deshacer ultima modificacion
+    private registroModificaciones: ModificacionPedido[]; //Registro de todas las modificaciones
     private fecha: Date;
 
     public constructor() {
@@ -21,6 +27,7 @@ export abstract class Pedido {
         this.cargoAdicional = CERO;
         this.estado = EstadoPedido.EN_CONSTRUCCION;
         this.historialModificaciones = [];
+        this.registroModificaciones = [];
         this.fecha = new Date();
     }
 
@@ -36,8 +43,15 @@ export abstract class Pedido {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden agregar ítems a un pedido confirmado o facturado.");
         }
-        this.items.push(item);
-        this.historialModificaciones.push(item);
+        
+        const comando = new ComandoAgregarItem(this.items, item);
+        comando.ejecutar();
+        this.historialModificaciones.push(comando);
+
+        this.registroModificaciones.push(
+            new ModificacionPedido(TipoModificacion.AGREGAR, item)
+        );
+
         this.calcularPrecioFinal();
     }
 
@@ -45,11 +59,21 @@ export abstract class Pedido {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden eliminar items de un pedido que no este en construcción.");
         }
+        if (!this.items.search(item)) {
+            throw new ErrorEnPedido("El item que se intenta eliminar no pertenece al pedido.");
+        }
         if (!item.puedeModificarse()) {
             throw new ErrorEnPedido("No se puede eliminar un item en preparacion.");
         }
 
-        this.items.delete(item);
+        const comando = new ComandoEliminarItem(this.items, item);
+        comando.ejecutar();
+        this.historialModificaciones.push(comando);
+
+        this.registroModificaciones.push(
+            new ModificacionPedido(TipoModificacion.ELIMINAR, item)
+        );
+
         this.calcularPrecioFinal();
     }
 
@@ -58,14 +82,28 @@ export abstract class Pedido {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden deshacer cambios en un pedido ya confirmado.");
         }
-        const ultimoItem = this.historialModificaciones.pop();
-        if (ultimoItem) {
-            this.items.delete(ultimoItem);
-            this.calcularPrecioFinal();
+        if (this.historialModificaciones.length === CERO) {
+            throw new ErrorEnPedido("No existen modificaciones para deshacer.");
         }
+
+        const ultimaModificacion = this.historialModificaciones[this.historialModificaciones.length-UNIDAD];
+        ultimaModificacion.deshacer();
+        this.historialModificaciones.pop();
+
+        if (ultimaModificacion.getTipo() === TipoModificacion.AGREGAR) {
+            this.registroModificaciones.push(
+                new ModificacionPedido(TipoModificacion.DESHACER_AGREGAR, ultimaModificacion.getItem())
+            );
+        } else {
+            this.registroModificaciones.push(
+                new ModificacionPedido(TipoModificacion.DESHACER_ELIMINAR, ultimaModificacion.getItem())
+            );
+        }
+
+        this.calcularPrecioFinal();
     }
 
-    public calcularPrecioFinal(): number {
+    private calcularPrecioFinal(): number {
         let total = CERO;
         let headAux = this.items.getHead();
         while (headAux) {

@@ -47,6 +47,13 @@
         VIERNES
         SABADO
     }
+
+    enum TipoModificacion {
+        AGREGAR
+        ELIMINAR
+        DESHACER_AGREGAR
+        DESHACER_ELIMINAR
+    }
     '-------------Restaurante-Sistema-----------------------
 
     class Restaurante {
@@ -59,28 +66,27 @@
     '------------------ PEDIDOS -------------------------
 
     abstract class Pedido {
-        ' -idPedido: number
-        '-items: ItemPedido[]
-        '-estado: EstadoPedido
-        '-precioFinal: number
+        - items: List<ItemPedido>
+        - estado: EstadoPedido
+        - precioFinal: number
+        - cargoAdicional: number
+        - identificador : number
+        - historialModificaciones: ComandoModificacion[]
+        - registroModificaciones: ModificacionPedido[]
+        - fecha: Date
 
-        -items: List<ItemPedido>
-        -estado: EstadoPedido
-        -precioFinal: number
-        -cargoAdicional: number
-        -identificador : number
-        -historialModificaciones: ItemPedido[]
-        -fecha: Date
-
-        +puedeModificarse():boolean
-        +agregarItem(item:ItemIndividual):void
-        +sacarItem(item:ItemIndividual):void
-        +setEstado(estado: EstadoPedido): void
-        +deshacerUltimaModificacion():void
-        +listoParaFacturar():boolean
-        ' +facturar():void
-        +calcularTotalCobrar():number
-
+        + puedeModificarse():boolean
+        + agregarItem(item:ItemPedido):void
+        + eliminarItem(item:ItemPedido):void
+        + deshacerUltimaModificacion():void
+        - calcularPrecioFinal():number
+        + getCargosAdicionales(): number
+        + setEstado(estado: EstadoPedido): void
+        + getEstado(): EstadoPedido
+        + getID():number
+        + getItems(): List<ItemPedido>
+        + listoParaFacturar():boolean
+        + getPrecioFinal(): number
     }
 
     class PedidoSalon {
@@ -104,9 +110,9 @@
         +insertFirst(value: T): MyNode<T>
         +removeFirst(): T
         +insertOrdered(value: T): MyNode<T>
-        +insertUnique(value: T): MyNode<T>
+        '+insertUnique(value: T): MyNode<T>
         +delete(value: T): T
-        +search(value: T): MyNode<T>
+        +search(value: T): boolean
         +sort(): void
         +clear(): void
     }
@@ -118,6 +124,44 @@
         +getNext() : MyNode<T>
         +setNext(node : MyNode<T>) : void
     }
+    
+    interface ComandoModificacion {
+        ejecutar(): void;
+        deshacer(): void;
+        getItem(): ItemPedido;
+        getTipo(): TipoModificacion.AGREGAR | TipoModificacion.ELIMINAR
+    }
+
+    class ModificacionPedido {
+        - tipo: TipoModificacion
+        - item: ItemPedido
+        + constructor(tipo: TipoModificacion, item: ItemPedido)
+        + getTipo(): TipoModificacion
+        + getItem(): ItemPedido
+    }
+
+    class ComandoEliminarItem {
+        - items: List<ItemPedido>
+        - item: ItemPedido
+
+        + constructor(items: List<ItemPedido>, item: ItemPedido)
+        + ejecutar(): void
+        + deshacer(): void
+        + getItem(): ItemPedido
+        + getTipo(): TipoModificacion.ELIMINAR
+    }
+
+    class ComandoAgregarItem {
+        - items: List<ItemPedido>
+        - item: ItemPedido
+
+        + constructor(items: List<ItemPedido>, item: ItemPedido)
+        + ejecutar(): void
+        + deshacer(): void
+        + getItem(): ItemPedido
+        + getTipo(): TipoModificacion.AGREGAR
+    }
+    
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
@@ -290,6 +334,15 @@
     Pedido -r-> EstadoPedido
     Pedido *-l- ListaEnlazada
     ListaEnlazada *-r- MyNode
+    ComandoModificacion -u-* Pedido
+    ComandoModificacion -[hidden]r- PedidoEnvio
+    ComandoModificacion -l-> TipoModificacion
+    ComandoAgregarItem .u.|> ComandoModificacion
+    ComandoEliminarItem .u.|> ComandoModificacion
+    PedidoEnvio -[hidden]r- PedidoSalon
+    PedidoRetirar -[hidden]l- PedidoEnvio
+    ModificacionPedido -r-* Pedido
+    ModificacionPedido --> TipoModificacion
 
 'MENU
     Menu *-- ItemIndividual
