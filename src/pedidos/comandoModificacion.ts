@@ -16,7 +16,7 @@ export abstract class ComandoModificacion {
     }
 
     
-    abstract ejecutar(): void;
-    abstract deshacer(): void;
-    abstract getTipo(): TipoModificacion.AGREGAR | TipoModificacion.ELIMINAR;
+    public abstract ejecutar(): void;
+    public abstract deshacer(): void;
+    public abstract getTipo(): TipoModificacion.AGREGAR | TipoModificacion.ELIMINAR;
 }

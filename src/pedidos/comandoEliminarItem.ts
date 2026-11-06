@@ -1,6 +1,6 @@
 import { ComandoModificacion } from "./comandoModificacion";
 import { TipoModificacion } from "./tipoModificacion";
-
+/*eslint-disable @typescript-eslint/class-methods-use-this*/
 export class ComandoEliminarItem extends ComandoModificacion {
     public ejecutar(): void {
         this.items.delete(this.item);
