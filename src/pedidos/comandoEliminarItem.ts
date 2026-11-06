@@ -2,7 +2,7 @@ import { List } from "../estructuraDatos/listaEnlazada";
 import { ItemPedido } from "../itemPedido";
 import { ComandoModificacion } from "./comandoModificacion";
 import { TipoModificacion } from "./tipoModificacion";
-
+/*eslint-disable @typescript-eslint/class-methods-use-this*/
 export class ComandoEliminarItem implements ComandoModificacion {
     private items: List<ItemPedido>;
     private item: ItemPedido;

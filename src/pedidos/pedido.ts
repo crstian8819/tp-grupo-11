@@ -103,7 +103,7 @@ export abstract class Pedido {
         this.calcularPrecioFinal();
     }
 
-    private calcularPrecioFinal(): number {
+    protected calcularPrecioFinal(): number {
         let total = CERO;
         let headAux = this.items.getHead();
         while (headAux) {
