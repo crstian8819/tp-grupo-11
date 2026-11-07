@@ -1,6 +1,7 @@
 import { Beneficio } from "./beneficio";
 import { ErrorEnDescuento } from "./Errores/errorEnDescuento";
 import { CERO, UNIDAD } from "./Constantes/constantes"
+import { ItemIndividual } from "./itemIndividual";
 
 export class DescuentoPorcentual implements Beneficio {
     /**
@@ -16,7 +17,12 @@ export class DescuentoPorcentual implements Beneficio {
         }
     }
 
-    public calcularBeneficio(precioBase: number): number {
-        return precioBase * this.descuento
+    public calcularBeneficio(items: ItemIndividual[]): number {
+        let precioCombo:number = CERO;
+        items.forEach((item: ItemIndividual) => {
+            precioCombo += item.getPrecio();
+        });
+        precioCombo = precioCombo*this.descuento;
+        return precioCombo;
     }
 }

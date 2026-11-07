@@ -57,10 +57,10 @@
     '-------------Restaurante-Sistema-----------------------
 
     class Restaurante {
-        -menu:Menu
-        -cocinas:Cocina[]
-        -gestorPedidos:GestorPedidos
-        -gestorPagos:GestorPagos
+        - menu:Menu
+        - cocinas:Cocina[]
+        - gestorPedidos:GestorPedidos
+        - gestorPagos:GestorPagos
     }
 
     '------------------ PEDIDOS -------------------------
@@ -79,7 +79,7 @@
         + agregarItem(item:ItemPedido):void
         + eliminarItem(item:ItemPedido):void
         + deshacerUltimaModificacion():void
-        - calcularPrecioFinal():number
+        # calcularPrecioFinal():number
         + getCargosAdicionales(): number
         + setEstado(estado: EstadoPedido): void
         + getEstado(): EstadoPedido
@@ -90,39 +90,39 @@
     }
 
     class PedidoSalon {
-        -nMesa: number
+        - nMesa: number
     }
 
     class PedidoRetirar {
-        -horario: number
+        - horario: number
     }
 
     class PedidoEnvio {
-        -direccion: string
-        -costoEnvio: number
+        - direccion: string
+        - costoEnvio: number
     }
 
     class ListaEnlazada<T> {
-        -head: MyNode<T>
-        +getHead() : MyNode<T>
-        +push(value: T): MyNode<T>
-        +removeLast(): T
-        +insertFirst(value: T): MyNode<T>
-        +removeFirst(): T
-        +insertOrdered(value: T): MyNode<T>
+        - head: MyNode<T>
+        + getHead() : MyNode<T>
+        + push(value: T): MyNode<T>
+        + removeLast(): T
+        + insertFirst(value: T): MyNode<T>
+        + removeFirst(): T
+        + insertOrdered(value: T): MyNode<T>
         '+insertUnique(value: T): MyNode<T>
-        +delete(value: T): T
-        +search(value: T): boolean
-        +sort(): void
-        +clear(): void
+        + delete(value: T): T
+        + search(value: T): boolean
+        + sort(): void
+        + clear(): void
     }
 
     class MyNode<T> {
-        -value : T;
-        -next : MyNode<T>;
-        +getValue() : T
-        +getNext() : MyNode<T>
-        +setNext(node : MyNode<T>) : void
+        - value : T;
+        - next : MyNode<T>;
+        + getValue() : T
+        + getNext() : MyNode<T>
+        + setNext(node : MyNode<T>) : void
     }
     
     class ModificacionPedido {
@@ -163,66 +163,67 @@
     '------------ MENU / PRODUCTOS -------------
 
     class Menu {
-        -entradas: itemIndividual[]
-        -platosPrincipales: itemIndividual[]
-        -bebidas: itemIndividual[]
-        -postres: itemIndividual[]
-        -combos: Combo[]
+        - entradas: itemIndividual[]
+        - platosPrincipales: itemIndividual[]
+        - bebidas: itemIndividual[]
+        - postres: itemIndividual[]
+        - combos: Combo[]
 
-        +agregarItem(item:ItemIndividual):void
-        +sacarItem(item:ItemIndividual):void
-        +agregarCombo(combo:Combo):void
-        +sacarCombo(combo:Combo):void
-        +getItemPorCategoria(categoria:Categoria):List<ItemIndividual>
+        + agregarItem(item:ItemIndividual):void
+        + sacarItem(item:ItemIndividual):void
+        + agregarCombo(combo:Combo):void
+        + sacarCombo(combo:Combo):void
+        + getItemPorCategoria(categoria:Categoria):List<ItemIndividual>
     }
 
     interface Producto {
-        +getPrecio(): number
+        + getPrecio(): number
     }
 
     abstract class Item { 
-        -nombre: string
-        -precio: number
+        - nombre: string
+        - precio: number
         
-        +getPrecio(): number
-        +getComponentes(): ItemIndividual[]
+        + getPrecio(): number
+        + getComponentes(): ItemIndividual[]
     }
 
     class ItemIndividual {
-        -categoria: Categoria
-        -estacion: TipoEstacion
+        - categoria: Categoria
+        - estacion: TipoEstacion
         
-        +getCategoria(): Categoria
-        +getTipoEstacion(): TipoEstacion
-        +getPrecio(): number
-        +getComponentes(): ItemIndividual[]
+        + getCategoria(): Categoria
+        + getTipoEstacion(): TipoEstacion
+        + getPrecio(): number
+        + getComponentes(): ItemIndividual[]
     }
 
     class ItemPedido {
-        -item: Item
-        -estado: EstadoItem
-        -cantidad: number
+        - item: Item
+        - estado: EstadoItem
+        - cantidad: number
 
-        +marcarEnPreparacion():void
-        +marcarListo():void
+        + marcarEnPreparacion():void
+        + marcarListo():void
     }
 
     class Combo {
-        -items: ItemIndividual[]
-        
-        +aplicarBeneficio(): number
-        +getPrecio(): number
-        +getComponentes(): ItemIndividual[]
+        - items: ItemIndividual[]
+        - beneficio: Beneficio
+        + setPrecio(): void
+        + getPrecio(): number
+        + getComponentes(): ItemIndividual[]
     }
 
-    interface BeneficioCombo {
-        calcularBeneficio(): number
+    interface Beneficio {
+        calcularBeneficio(items: ItemIndividual[]): number
     }
+    note right of Combo::setPrecio()
+        this.precio = this.beneficio.calcularBeneficio();
+    end note
 
     note right of Combo::getComponentes()
-        
         return this.items
-    
     end note
 
     class PrecioFijo {
@@ -236,11 +237,16 @@
 
     class DescuentoPorcentual {
         + constructor(private descuento:number)
-        + calcularBeneficio(precioBase: number): number
+        + calcularBeneficio(items: ItemIndividual[]): number
     }
 
     note left of DescuentoPorcentual::calcularBeneficio
-       return precioBase * this.descuento 
+        let precioCombo:number = CERO;
+        items.forEach((item: ItemIndividual) => {
+            precioCombo += item.getPrecio();
+        });
+        precioCombo = precioCombo*this.descuento;
+        return precioCombo;
     end note
 
     '--------------------- COCINA ----------------------
@@ -347,9 +353,9 @@
     Menu *-d- Combo
     Combo -l-> ItemIndividual
     Combo --|> Item
-    Combo --> BeneficioCombo
-    PrecioFijo .u.|> BeneficioCombo
-    DescuentoPorcentual .u.|> BeneficioCombo
+    Combo --> Beneficio
+    PrecioFijo .u.|> Beneficio
+    DescuentoPorcentual .u.|> Beneficio
     DescuentoPorcentual -[hidden]r- PrecioFijo
     ItemIndividual --|> Item
     Item .r.|> Producto

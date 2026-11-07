@@ -1,3 +1,5 @@
+import { ItemIndividual } from "./itemIndividual";
+
 export interface Beneficio {
-    calcularBeneficio(precioBase: number): number;
+    calcularBeneficio(items: ItemIndividual[]): number;
 }

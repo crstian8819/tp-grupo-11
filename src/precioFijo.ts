@@ -14,6 +14,6 @@ export class PrecioFijo implements Beneficio {
     }
 
     public calcularBeneficio(): number {
-        return this.precio
+        return this.precio;
     }
 }
