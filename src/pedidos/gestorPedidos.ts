@@ -92,13 +92,11 @@ export class GestorPedidos {
         return this.pedidosFinalizados.size
     }
 
-    public consultarHistorial(): void {
+    public consultarHistorial(): Factura[] {
         if (this.pedidosFinalizados.size === CERO) {
             throw new ErrorEnHistorial("El historial de pedidos finalizados está vacío.");
         }
-        this.pedidosFinalizados.forEach((factura) => {
-            console.log(factura.getInfoPedido());
-        });
+        return Array.from(this.pedidosFinalizados.values());
     }
 
     public getPedidosFinalizados(): Map<number, Factura> {
