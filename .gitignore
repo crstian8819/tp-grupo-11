@@ -3,3 +3,5 @@ node_modules/
 
 # Reportes de cobertura de tests
 coverage/
+
+dist/
