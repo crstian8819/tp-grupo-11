@@ -33,6 +33,15 @@ describe("Tests de la clase abstracta Pedido", () => {
     test("Debe devolver true, si se encuentra el item", () => {
         const hamburguesa = new ItemIndividual("hamburguesa", Categoria.PLATO_PRINCIPAL, TipoEstacion.PARRILLA);
         const itemPedido = new ItemPedido(hamburguesa, 2);
+        instance.agregarItem(itemPedido);
         expect(instance.getItems().search(itemPedido)).toBe(true);
-    })
+    });
+
+    test("Debe devolver false, si se elimino el item", () => {
+        const hamburguesa = new ItemIndividual("hamburguesa", Categoria.PLATO_PRINCIPAL, TipoEstacion.PARRILLA);
+        const itemPedido = new ItemPedido(hamburguesa, 2);
+        instance.agregarItem(itemPedido);
+        instance.eliminarItem(itemPedido);
+        expect(instance.getItems().search(itemPedido)).toBe(true);
+    });
 });
