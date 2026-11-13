@@ -156,7 +156,37 @@ describe("Pruebas Unitarias - GestorPagos", () => {
 
     });
 
-    
+    describe("Complemento GestorPagos: Factura, DescuentoDia", () => {
+        test("DescuentoDia: debe permitir modificar y obtener el día y el porcentaje mediante sus setters y getters", () => {
+            const descuento = new DescuentoDia(DiaSemana.LUNES, 0.9);
+
+            descuento.setDiaDeLaSemana(DiaSemana.VIERNES);
+            descuento.setPorcentajeDescuento(0.7);
+
+            expect(descuento.getDiaDeLaSemana()).toBe(DiaSemana.VIERNES);
+            expect(descuento.getPorcentajeDescuento()).toBe(0.7);
+        });
+
+        test("Factura: debe retornar la referencia del pedido y el monto final mediante getters", () => {
+            const pedido = new PedidoSalon(1);
+            const factura = new Factura(pedido, 3000);
+
+            expect(factura.getPedido()).toBe(pedido);
+            expect(factura.getMontoFinal()).toBe(3000);
+        });
+
+        test("GestorPagos: debe permitir obtener el descuento del día y el descuento en efectivo configurados", () => {
+            const gestorPedidos = new GestorPedidos();
+            const gestorPagos = new GestorPagos(gestorPedidos);
+            const descuentoDia = new DescuentoDia(DiaSemana.MARTES, 0.85);
+
+            gestorPagos.setDescuentoDelDia(descuentoDia);
+            gestorPagos.setDescuentoEnEfectivo(0.8);
+
+            expect(gestorPagos.getDescuentoDelDia()).toBe(descuentoDia);
+            expect(gestorPagos.getDescuentoEnEfectivo()).toBe(0.8);
+        });
+    });
     
     afterEach(() => {});
 
