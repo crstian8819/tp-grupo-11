@@ -61,6 +61,16 @@
         - cocinas:Cocina[]
         - gestorPedidos:GestorPedidos
         - gestorPagos:GestorPagos
+
+        + agregarEstacionCocina(c: Cocina): void
+        + getMenu(): Menu
+        + configurarPromocionDia(d: DescuentoDia): void
+        + abrirPedidoSalon(mesa: number): Pedido
+        + abrirPedidoRetirar(horario: number): Pedido
+        + abrirPedidoEnvio(direc: string): Pedido
+        + confirmarPedido(idPedido: number): void
+        + cobrarPedido(idPedido: number, medioPago: MedioPago): Factura
+        + obtenerHistorialVentas(): Factura[]
     }
 
     '------------------ PEDIDOS -------------------------
