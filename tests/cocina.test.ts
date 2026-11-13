@@ -66,4 +66,10 @@ describe("Pruebas Unitarias de Cocina",()=>{
         parrilla.setSiguiente(barra);
         expect(() => parrilla.buscarCocina(TipoEstacion.COCINA_DULCE)).toThrow(ErrorEnCocina);
     });
+
+    test("Debe cubrir getNombre y buscarCocina sin siguiente",()=> { 
+        const parrilla=new Parrilla();
+        expect(parrilla.getNombre()).toBe("Parrilla");
+        expect(()=> parrilla.buscarCocina(TipoEstacion.BARRA)).toThrow(ErrorEnCocina);
+    });
 });
