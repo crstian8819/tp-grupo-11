@@ -106,7 +106,7 @@ export class List<T> {
         while (headAux && headAux.getValue() !== value) {
         headAux = headAux.getNext();
         }
-        return headAux !== null;
+        return Boolean(headAux);
     }
 
     public sort(): void {
