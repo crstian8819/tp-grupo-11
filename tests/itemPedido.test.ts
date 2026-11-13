@@ -5,6 +5,7 @@ import { ErrorEnItemPedido } from '../src/Errores/errorEnItemPedido';
 import { ItemIndividual } from '../src/itemIndividual';
 import { Categoria } from '../src/categoria';
 import { TipoEstacion } from '../src/cocina/tipoEstacion';
+import { EnPreparacion } from '../src/cocina/enPreparacion';
 
 describe("test:De Items Pedidos",()=>{
     let itemSimple:ItemPedido;
@@ -73,5 +74,16 @@ describe("test:De Items Pedidos",()=>{
         expect(()=>itemCompuesto.avanzarEstado()).toThrow(ErrorEnItemPedido);
         expect(()=>itemCompuesto.avanzarEstado()).toThrow( "Esta linea avanza segun las preparaciones en La cocina" );
     });
+    test("Debería cubrir setEstado y avanzar cuando el ítem ya está LISTO",()=>{
+        const bife=new ItemIndividual("Bife", Categoria.PLATO_PRINCIPAL, TipoEstacion.PARRILLA);
+        const item=new ItemPedido(bife, 1);
+        // Cubre setEstado() 
+        item.setEstado(new EnPreparacion());
+        expect(item.getEstado()).toBe(EstadoItem.EN_PREPARACION);
+        // Pasa a LISTO 
+        item.avanzarEstado();
+        expect(item.getEstado()).toBe(EstadoItem.LISTO);
+        // Intentar avanzar estando en LISTO dispara las líneas no cubiertas de listo.ts
+        expect(()=> item.avanzarEstado()).toThrow(); });
 
 });
