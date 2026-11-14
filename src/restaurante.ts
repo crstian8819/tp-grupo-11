@@ -8,7 +8,7 @@ import { Factura } from "./GestorPagos/factura";
 import { MedioPago } from "./GestorPagos/medioPago";
 import { DescuentoDia } from "./GestorPagos/descuentoDia";
 import { ErrorEnCocina } from "./Errores/errorEnCocina";
-import { UNIDAD } from "./Constantes/constantes";
+import { CERO, UNIDAD } from "./Constantes/constantes";
 /**
  * Clase princpial del sistema (Patrón Facade)
  * Agrupa y coordina los subsistemas: Menú, Cocinas, GestorPedidos y GestorPagos.
@@ -49,7 +49,7 @@ export class Restaurante {
      * automáticamente según el patrón Chain of Responsability.
      */
     public agregarCocina(cocina: Cocina): void {
-        if (this.cocinas.length > 0) {
+        if (this.cocinas.length > CERO) {
             const ultimaCocina = this.cocinas[this.cocinas.length - UNIDAD];
             ultimaCocina.setSiguiente(cocina);
         } else {
