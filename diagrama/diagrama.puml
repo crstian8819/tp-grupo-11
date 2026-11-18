@@ -274,6 +274,19 @@
     class CocinaFria{}
     class Barra{}
 
+    class DistribuirItem { 
+        - primeraCocina: Cocina 
+        + distribuir(lineas: ItemPedido[]): ItemPedido[] 
+    }
+
+    abstract class EstadoPreparacion { 
+        + {abstract} getNombre(): EstadoItem 
+        + {abstract} puedeModificarse(): boolean 
+        + {abstract} avanzar(item: ItemPedido): void 
+    }
+    class Pendiente{}
+    class EnPreparacion{}
+    class Listo{}
     '------------------ DESCUENTO -----------------
 
     interface DescuentoBeneficioso {
@@ -370,7 +383,8 @@
     ItemIndividual --|> Item
     Item .r.|> Producto
     ItemPedido -u-> Item
-
+    ItemPedido *-- EstadoPreparacion
+    EstadoPreparacion .[hidden]d.>ItemPedido
     Menu -[hidden]u- Categoria
 'COCINA
     Parrilla -u-|> Cocina
@@ -378,7 +392,11 @@
     CocinaFria -u-|> Cocina
     Barra -u-|> Cocina
     ItemPedido <-- Cocina
-
+    Pendiente --|> EstadoPreparacion
+    EnPreparacion --|> EstadoPreparacion
+    Listo --|> EstadoPreparacion
+    DistribuirItem -right-> Cocina 
+    DistribuirItem .right.> ItemPedido
 'GESTOR DE PAGOS
     GestorPagos -l-* MedioPago
     GestorPagos --o DescuentoDia
