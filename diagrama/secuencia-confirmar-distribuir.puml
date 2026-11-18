@@ -1,0 +1,51 @@
+@startuml 
+ title Confirmar pedido y distribuir items
+
+ actor Usuario
+ participant Restaurante
+ participant GestorPedidos
+ participant Pedido
+ participant DistribuirItem
+ participant Cocinas
+
+ Usuario -> Restaurante: confirmarPedido(idPedido)
+ Restaurante -> GestorPedidos: getPedidoPorId(idPedido)
+ GestorPedidos --> Restaurante: Pedido | undefined
+
+ alt El pedido no existe
+   Restaurante --> Usuario: Error: pedido inexistente
+ else El pedido existe
+   alt No hay distribuidor configurado
+     Restaurante --> Usuario: ErrorEnCocina
+   else Hay cocinas registradas
+     Restaurante -> GestorPedidos: confirmarPedido(pedido, distribuidor)
+     GestorPedidos -> Pedido: getEstado()
+     Pedido --> GestorPedidos: estado
+
+     alt Estado distinto de EN_CONSTRUCCION
+       GestorPedidos --> Restaurante: Error
+     else Pedido en construcción
+       GestorPedidos -> Pedido: getItems().getHead()
+       Pedido --> GestorPedidos: primer ítem
+       alt Pedido vacío
+         GestorPedidos --> Restaurante: ErrorEnConfirmacion
+       else Tiene ítems
+         GestorPedidos -> GestorPedidos: distribuirItemsACocina(pedido, distribuidor)
+         GestorPedidos -> Pedido: getItems()
+         Pedido --> GestorPedidos: lista enlazada de ítems
+         GestorPedidos -> DistribuirItem: distribuir(lineas)
+         loop Por cada línea, cantidad y componente
+           DistribuirItem -> Cocinas: buscarCocina(tipoEstacion)
+           Cocinas --> DistribuirItem: cocina correspondiente
+           DistribuirItem -> Cocinas: recibirItem(item de preparación)
+           DistribuirItem -> Pedido: línea.agregarPreparacion(item)
+         end
+         DistribuirItem --> GestorPedidos: ítems distribuidos
+         GestorPedidos -> Pedido: setEstado(CONFIRMADO)
+         GestorPedidos --> Restaurante: confirmación completada
+         Restaurante --> Usuario: Pedido confirmado
+       end
+     end
+   end
+ end
+@enduml
