@@ -20,6 +20,9 @@ export class Restaurante {
     private gestorPagos: GestorPagos;
     private distribuidor: DistribuirItem | undefined;
 
+    /**
+     * Inicializa el objeto y establece sus valores iniciales.
+     */
     public constructor() {
         this.menu = new Menu();
         this.cocinas = [];
@@ -28,18 +31,34 @@ export class Restaurante {
         this.distribuidor = undefined;
     }
 
+    /**
+     * Devuelve el menu administrado por el restaurante.
+     * @returns {Menu} Resultado de la operacion.
+     */
     public getMenu(): Menu {
         return this.menu;
     }
 
+    /**
+     * Devuelve el gestor de pedidos del restaurante.
+     * @returns {GestorPedidos} Resultado de la operacion.
+     */
     public getGestorPedidos(): GestorPedidos {
         return this.gestorPedidos;
     }
 
+    /**
+     * Devuelve el gestor de pagos del restaurante.
+     * @returns {GestorPagos} Resultado de la operacion.
+     */
     public getGestorPagos(): GestorPagos {
         return this.gestorPagos;
     }
 
+    /**
+     * Devuelve una copia de las cocinas registradas.
+     * @returns {Cocina[]} Resultado de la operacion.
+     */
     public getCocinas(): Cocina[] {
         return [...this.cocinas];
     }
@@ -58,22 +77,45 @@ export class Restaurante {
         this.cocinas.push(cocina);
     }
 
+    /**
+     * Configura el descuento correspondiente a un dia de la semana.
+     * @param {DescuentoDia} descuento - Factor de descuento.
+     */
     public configurarDescuentoDelDia(descuento: DescuentoDia): void {
         this.gestorPagos.setDescuentoDelDia(descuento);
     }
 
+    /**
+     * Configura el factor de descuento para pagos en efectivo.
+     * @param {number} descuento - Factor de descuento.
+     */
     public configurarDescuentoEnEfectivo(descuento: number): void {
         this.gestorPagos.setDescuentoEnEfectivo(descuento);
     }
 
+    /**
+     * Crea y devuelve un pedido asociado a una mesa.
+     * @param {number} mesa - Numero de mesa.
+     * @returns {Pedido} Resultado de la operacion.
+     */
     public abrirPedidoSalon(mesa: number): Pedido {
         return this.gestorPedidos.crearPedidoSalon(mesa);
     }
 
+    /**
+     * Crea y devuelve un pedido para retirar en un horario.
+     * @param {number} horario - Horario de retiro.
+     * @returns {Pedido} Resultado de la operacion.
+     */
     public abrirPedidoRetirar(horario: number): Pedido {
         return this.gestorPedidos.crearPedidoRetirar(horario);
     }
 
+    /**
+     * Crea y devuelve un pedido para enviar a una direccion.
+     * @param {string} direccion - Direccion de envio.
+     * @returns {Pedido} Resultado de la operacion.
+     */
     public abrirPedidoEnvio(direccion: string): Pedido {
         return this.gestorPedidos.crearPedidoEnvio(direccion);
     }
@@ -116,6 +158,10 @@ export class Restaurante {
         return factura;
     }
 
+    /**
+     * Devuelve las facturas registradas en el historial de ventas.
+     * @returns {Factura[]} Resultado de la operacion.
+     */
     public consultarHistorialVentas(): Factura[] {
         return this.gestorPedidos.consultarHistorial();
     }

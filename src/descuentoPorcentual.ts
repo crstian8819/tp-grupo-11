@@ -3,6 +3,9 @@ import { ErrorEnDescuento } from "./Errores/errorEnDescuento";
 import { CERO, UNIDAD } from "./Constantes/constantes"
 import { ItemIndividual } from "./itemIndividual";
 
+/**
+ * Beneficio que calcula el precio de un combo aplicando un porcentaje sobre sus productos.
+ */
 export class DescuentoPorcentual implements Beneficio {
     /**
      * @param descuento - Se aplica directamente en la multiplicación:
@@ -17,6 +20,11 @@ export class DescuentoPorcentual implements Beneficio {
         }
     }
 
+    /**
+     * Calcula el precio o beneficio que corresponde aplicar.
+     * @param {ItemIndividual[]} items - Lista de items involucrados.
+     * @returns {number} Resultado de la operacion.
+     */
     public calcularBeneficio(items: ItemIndividual[]): number {
         let precioCombo:number = CERO;
         items.forEach((item: ItemIndividual) => {

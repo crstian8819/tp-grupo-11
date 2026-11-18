@@ -3,6 +3,9 @@ import {MyNode} from "./node";
 export class List<T> {
     
     private head: MyNode<T>;
+    /**
+     * Inicializa el objeto y establece sus valores iniciales.
+     */
     public constructor() {
         this.head = undefined as unknown as MyNode<T>;
     }

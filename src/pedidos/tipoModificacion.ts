@@ -1,3 +1,6 @@
+/**
+ * Define TipoModificacion y su responsabilidad dentro del sistema.
+ */
 export enum TipoModificacion {
     AGREGAR = "AGREGAR",
     ELIMINAR = "ELIMINAR",

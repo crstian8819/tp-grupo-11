@@ -10,6 +10,9 @@ import { ComandoModificacion } from "./comandoModificacion";
 import { ComandoAgregarItem } from "./comandoAgregarItem";
 import { ComandoEliminarItem } from "./comandoEliminarItem";
 
+/**
+ * Clase abstracta que representa un pedido y administra sus items, estado, precio e historial de modificaciones.
+ */
 export abstract class Pedido {
     private items: List<ItemPedido>;
     private estado: EstadoPedido;
@@ -20,6 +23,9 @@ export abstract class Pedido {
     private registroModificaciones: ModificacionPedido[]; //Registro de todas las modificaciones
     private fecha: Date;
 
+    /**
+     * Inicializa el objeto y establece sus valores iniciales.
+     */
     public constructor() {
         this.identificador = undefined as unknown as number;
         this.items = new List<ItemPedido>();
@@ -31,14 +37,26 @@ export abstract class Pedido {
         this.fecha = new Date();
     }
 
+    /**
+     * Devuelve la fecha en la que se creo el pedido.
+     * @returns {Date} Resultado de la operacion.
+     */
     public getFecha(): Date {
         return this.fecha;
     }
 
+    /**
+     * Indica si el pedido se encuentra en construccion y permite modificaciones.
+     * @returns {boolean} Resultado de la operacion.
+     */
     public puedeModificarse () : boolean {
         return this.estado === EstadoPedido.EN_CONSTRUCCION;
     }
 
+    /**
+     * Agrega un item al pedido y registra la modificacion para poder deshacerla.
+     * @param {ItemPedido} item - Item involucrado en la operacion.
+     */
     public agregarItem(item: ItemPedido): void {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden agregar ítems a un pedido confirmado o facturado.");
@@ -55,6 +73,10 @@ export abstract class Pedido {
         this.calcularPrecioFinal();
     }
 
+    /**
+     * Elimina un item del pedido y registra la modificacion para poder deshacerla.
+     * @param {ItemPedido} item - Item involucrado en la operacion.
+     */
     public eliminarItem(item: ItemPedido): void {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden eliminar items de un pedido que no este en construcción.");
@@ -78,6 +100,9 @@ export abstract class Pedido {
     }
 
     //metodo para deshacer ultima modificacion
+    /**
+     * Deshace la ultima modificacion realizada sobre el pedido.
+     */
     public deshacerUltimaModificacion(): void {
         if (!this.puedeModificarse()) {
             throw new ErrorEnPedido("No se pueden deshacer cambios en un pedido ya confirmado.");
@@ -103,6 +128,10 @@ export abstract class Pedido {
         this.calcularPrecioFinal();
     }
 
+    /**
+     * Realiza la operacion calcularPrecioFinal dentro del sistema.
+     * @returns {number} Resultado de la operacion.
+     */
     protected calcularPrecioFinal(): number {
         let total = CERO;
         let headAux = this.items.getHead();
@@ -116,31 +145,58 @@ export abstract class Pedido {
     }
 
     // Metodo para sumar cargos adicionales según modalidad (ej. costoEnvio)
+    /**
+     * Devuelve los cargos adicionales correspondientes al pedido.
+     * @returns {number} Resultado de la operacion.
+     */
     public getCargosAdicionales(): number {
         return this.cargoAdicional;
     }
 
     
+    /**
+     * Actualiza el estado del pedido o item.
+     * @param {EstadoPedido} estado - Nuevo estado que se desea establecer.
+     */
     public setEstado(estado: EstadoPedido) : void {
         this.estado = estado
     }
 
+    /**
+     * Devuelve el estado actual.
+     * @returns {EstadoPedido} Resultado de la operacion.
+     */
     public getEstado() : EstadoPedido {
         return this.estado;
     }
 
+    /**
+     * Asigna el identificador.
+     * @param {number} identificador - Identificador del elemento.
+     */
     public setID(identificador : number) : void {
         this.identificador = identificador;
     }
 
+    /**
+     * Devuelve el identificador.
+     * @returns {number} Resultado de la operacion.
+     */
     public getID() : number {
         return this.identificador;
     }
 
+    /**
+     * Devuelve una copia de los items recibidos por la cocina.
+     * @returns {List<ItemPedido>} Resultado de la operacion.
+     */
     public getItems(): List<ItemPedido> {
         return this.items;
     }
 
+    /**
+     * Muestra por consola los items que contiene el pedido.
+     */
     public listItems(): void {
         let headAux = this.items.getHead();
         while (headAux) {
@@ -150,17 +206,29 @@ export abstract class Pedido {
         }
     }
     
+    /**
+     * Calcula y devuelve el precio final del pedido.
+     * @returns {number} Resultado de la operacion.
+     */
     public getPrecioFinal() : number {
         return this.calcularPrecioFinal();
     }
 
     
 
+    /**
+     * Indica si el estado del pedido permite iniciar la facturacion.
+     * @returns {boolean} Resultado de la operacion.
+     */
     public puedeFacturar() : boolean {
         return this.estado === EstadoPedido.CONFIRMADO;
     }
 
     //Impide facturar hasta que el pedido este CONFIRMADO y todos los items esten LISTO
+    /**
+     * Verifica que el pedido este confirmado, no este vacio y que todos sus items esten listos.
+     * @returns {boolean} Resultado de la operacion.
+     */
     public listoParaFacturar(): boolean {
         let resultado = true
         if (this.estado !== EstadoPedido.CONFIRMADO) {

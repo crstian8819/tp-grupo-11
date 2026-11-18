@@ -3,14 +3,26 @@ import { Cocina } from "./cocina";
 import { CERO, UNIDAD } from "../Constantes/constantes"
 
 
+/**
+ * Distribuye los componentes de las lineas de pedido entre las cocinas correspondientes.
+ */
 export class DistribuirItem {
     private primeraCocina: Cocina;
 
+    /**
+     * Inicializa el objeto y establece sus valores iniciales.
+     * @param {Cocina} primeraCocina - Dato necesario para inicializar el objeto.
+     */
     public constructor(primeraCocina: Cocina) {
         this.primeraCocina = primeraCocina;
     }
 
     
+    /**
+     * Distribuye cada componente de las lineas del pedido en su cocina correspondiente.
+     * @param {ItemPedido[]} lineas - Lineas de items que se deben distribuir.
+     * @returns {ItemPedido[]} Resultado de la operacion.
+     */
     public distribuir(lineas: ItemPedido[]): ItemPedido[] {
         const envios: { cocina: Cocina; item: ItemPedido,linea:ItemPedido }[] = [];
 
