@@ -1,0 +1,44 @@
+@startuml
+ title Cobrar un pedido y registrar la factura
+ actor Usuario
+ participant Restaurante
+ participant GestorPedidos
+ participant GestorPagos
+ participant Pedido
+ participant Factura
+ Usuario -> Restaurante: cobrarPedido(id, medioPago)
+ Restaurante -> GestorPedidos: getPedidoPorId(id)
+ GestorPedidos --> Restaurante: pedido
+ alt Pedido inexistente
+   Restaurante --> Usuario: Error: pedido inexistente
+ else Pedido encontrado
+   Restaurante -> GestorPagos: setMedioPago(medioPago)
+   Restaurante -> GestorPagos: cobrar(pedido)
+   GestorPagos -> Pedido: listoParaFacturar()
+   Pedido --> GestorPagos: true / false
+   alt Pedido no listo para facturar
+     GestorPagos --> Restaurante: ErrorEnFacturacion
+     Restaurante --> Usuario: no se puede facturar
+   else Pedido listo
+     GestorPagos -> GestorPagos: verificar medioPago
+     alt No hay medio de pago
+       GestorPagos --> Restaurante: ErrorEnFacturacion
+       Restaurante --> Usuario: falta medio de pago
+     else Medio de pago seteado
+       GestorPagos -> Pedido: getPrecioFinal()
+       Pedido --> GestorPagos: precio final
+       GestorPagos -> GestorPagos: calcularDescuento(pedido)
+       GestorPagos -> GestorPagos: calcular importe final
+       create Factura
+       GestorPagos -> Factura: new Factura(pedido, monto)
+       GestorPagos -> Pedido: setEstado(FACTURADO)
+       GestorPagos -> GestorPedidos: registrarPedidoFinalizado(factura)
+       GestorPedidos -> Factura: setIdFactura(id)
+       GestorPedidos -> GestorPedidos: guardar factura en pedidosFinalizados
+       GestorPedidos --> GestorPagos: factura registrada
+       GestorPagos --> Restaurante: factura
+       Restaurante --> Usuario: factura emitida
+     end
+   end
+ end
+ @enduml
