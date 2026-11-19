@@ -1,0 +1,100 @@
+@startuml DiagramaSecuencia_DistribuidoryCambioEstadoCocina
+
+skinparam SequenceMessageAlignment center
+
+actor Cocinero
+participant "distribuidor:DistribuirItem" as Distribuidor
+participant "parrilla: Parrilla" as Parrilla 
+participant "barra: Barra" as Barra 
+participant "lineaPedido: ItemPedido" as Linea 
+participant "item: ItemPedido" as Item 
+participant "estadoPendiente: Pendiente" as EstPendiente 
+participant "estadoEnPrep: EnPreparacion" as EstEnPrep 
+participant "estadoListo: Listo" as EstListo
+
+== 1. Distribucion del Item ==
+[-> Distribuidor:distribuir([lineaPedido])
+activate Distribuidor
+
+loop Para cada unidad y componente de la línea 
+Distribuidor -> Parrilla: buscarCocina(BARRA)
+activate Parrilla 
+Parrilla -> Barra: buscarCocina(BARRA)
+activate Barra 
+Barra --> Parrilla: barra (atiende estación)
+deactivate Barra 
+Parrilla --> Distribuidor: barra 
+deactivate Parrilla 
+Distribuidor -> Barra: recibirItem(item) 
+activate Barra 
+Barra --> Distribuidor: ok 
+deactivate Barra 
+Distribuidor -> Linea: agregarPreparacion(item) 
+activate Linea 
+Linea --> Distribuidor: ok 
+deactivate Linea 
+end
+[<-- Distribuidor: itemsDistribuidos
+deactivate Distribuidor
+
+== 2.Avanzar Estado:PENDIENTE -> EN_PREPARACION ==
+
+Cocinero -> Barra: procesarSiguiente()
+activate Barra
+
+Barra -> Item: getEstado()
+activate Item 
+Item --> Barra: PENDIENTE
+deactivate Item 
+
+Barra -> Item: avanzarEstado()
+activate Item
+
+Item -> EstPendiente: avanzar(item)
+activate EstPendiente
+
+create participant "nuevoEstado:EnPreparacion" as EstEnPrep
+EstPendiente -> EstEnPrep: new() 
+EstPendiente -> Item: setEstado(estadoEnPrep) 
+activate Item 
+Item --> EstPendiente: ok 
+deactivate Item 
+EstPendiente --> Item: ok 
+deactivate EstPendiente 
+Item --> Barra: ok 
+deactivate Item 
+Barra --> Cocinero: ok (ítem pasa a EN_PREPARACION)
+deactivate Barra 
+== 3 Avance de Estado: EN_PREPARACION -> LISTO == 
+Cocinero -> Barra: procesarSiguiente() 
+activate Barra 
+Barra -> Item: getEstado() 
+activate Item 
+Item --> Barra: EN_PREPARACION 
+deactivate Item 
+Barra -> Item: avanzarEstado() 
+activate Item 
+Item -> EstEnPrep: avanzar(item) 
+activate EstEnPrep 
+
+create participant "nuevoEstado:Listo" as EstListo 
+EstEnPrep -> EstListo: new() 
+EstEnPrep -> Item: setEstado(estadoListo) 
+activate Item 
+Item --> EstEnPrep: ok 
+deactivate Item 
+EstEnPrep --> Item: ok 
+deactivate EstEnPrep 
+Item --> Barra: ok 
+deactivate Item 
+Barra --> Cocinero: ok (ítem pasa a LISTO) 
+deactivate Barra
+
+
+
+
+
+
+
+
+@enduml
